@@ -30,6 +30,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         repocount_tracker = 0
 
         logger.info(f"Filtering repositories in org: {obj.org_name} by creation time asc and creating PRs.")
+        print(type(self.org))
 
         for repo in self.org.get_repos(direction="desc", sort="created", type="all"):
             repocount_tracker += 1
