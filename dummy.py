@@ -8,10 +8,13 @@ from pr_gen_service import PullRequestAutomationService
 configure_logging()
 logger = structlog.get_logger(__name__) 
 
+GITHUB_REMOTE = "git@github.com:"
+ORIGIN = "origin"
+
 obj=PullRequestAutomationService()
 
 class PullRequestForNewRepos(PullRequestAutomationService):
- 
+  
 
     def __init__(self):
         obj.__init__(self)
