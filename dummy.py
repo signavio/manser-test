@@ -22,7 +22,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         super().__init__()
 
             
-    def create_prs_in_batches():  
+    def create_prs_in_batches(self):  
         """Creates PRs for repositories created within the last 30 days.
         It pushes the files to be delivered as per the configuration env var files.
         """
