@@ -3,7 +3,7 @@ import os
 import structlog
 from logconfig import configure_logging
 from git import Repo, GitCommandError, RemoteProgress
-from github import Github
+from github import Github ,GithubApp
 from dotenv import load_dotenv
 from github.GithubException import GithubException
 
@@ -37,7 +37,20 @@ class PullRequestAutomationService(RemoteProgress):
         self.git_commit_msg = os.getenv('GIT_COMMIT_MSG')
         self.git_pr_title = os.getenv('GIT_PR_TITLE')
         self.git_pr_test = os.getenv('GIT_PR_TEST')
+        
+        self.app_id = int(os.getenv('GITHUB_APP_ID'))
+        self.private_key_path = os.getenv('GITHUB_PRIVATE_KEY_PATH')
+        self.installation_id = int(os.getenv('GITHUB_INSTALLATION_ID'))
+        self.token = self.get_github_app_token()
         logger.info("Initialisation completed")
+
+    def get_github_app_token(self):
+        """Get GitHub App installation token."""
+        private_key = open(self.private_key_path).read()
+        app = GithubApp(self.app_id, private_key)
+        installation = app.get_installation(self.installation_id)
+        access_token = installation.create_access_token()
+        return access_token.token
 
     def commit_and_push(self):
         """Adds, commits and pushes files. It validates if no changes are there before commit and push.
