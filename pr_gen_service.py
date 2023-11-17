@@ -25,10 +25,10 @@ class PullRequestAutomationService(RemoteProgress):
     def __init__(self):
         logger.info("Loading environment variables...")
         load_dotenv()
-        self.token = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
+        # self.token = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
         self.org_name = os.getenv("GITHUB_ORG")
         logger.info("Authenticating...")
-        self.org = self.token.get_organization(self.org_name)
+        self.org = "signavio"
         self.jira_ticket = os.getenv('JIRA_TICKET')
         self.branch_name = os.getenv('BRANCH_NAME_PREFIX') + os.getenv('JIRA_TICKET') + os.getenv('BRANCH_NAME_SUFFIX')
         self.repo_count = int(os.getenv('REPO_COUNT'))
