@@ -31,7 +31,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
 
         logger.info(f"Filtering repositories in org: {obj.org_name} by creation time asc and creating PRs.")
 
-        for repo in obj.org.get_repos(direction="desc", sort="created", type="all"):
+        for repo in self.org.get_repos(direction="desc", sort="created", type="all"):
             repocount_tracker += 1
             if repo == "manser-test":
                 creation_date = repo.created_at.replace(tzinfo=None)
