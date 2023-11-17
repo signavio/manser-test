@@ -19,7 +19,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
     # logger = structlog.get_logger(__name__) 
     
     def __init__(self):
-        obj.__init__(self)
+        super().__init__()
 
             
     def create_prs_in_batches():  
