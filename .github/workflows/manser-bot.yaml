@@ -20,7 +20,10 @@ jobs:
 
     - name: Manser Bot PR Gen
       id: get_workflow_token 
-      run: |
+      with:
         application_id: ${{ secrets.MANSER_BOT_APPLICATION_ID }}
         application_private_key: ${{ secrets.MANSER_BOT_APPLICATION_PRIVATE_KEY }}
+
+    - name: Run python script
+      run: |
         python dummy.py
