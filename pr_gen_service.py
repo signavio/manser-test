@@ -26,6 +26,7 @@ class PullRequestAutomationService(RemoteProgress):
         logger.info("Loading environment variables...")
         load_dotenv()
         # self.token = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
+        self.base_branch_name = None
         self.org_name = os.getenv("GITHUB_ORG")
         logger.info("Authenticating...")
         self.org = "signavio"
