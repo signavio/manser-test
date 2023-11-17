@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 
 from pr_gen_service import PullRequestAutomationService  
 
-# configure_logging()
-# logger = structlog.get_logger(__name__) 
+configure_logging()
+logger = structlog.get_logger(__name__) 
 
 GITHUB_REMOTE = "git@github.com:"
 ORIGIN = "origin"
@@ -29,7 +29,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         cutoff_date = datetime.now() - timedelta(days=60)
         repocount_tracker = 0
 
-        # logger.info(f"Filtering repositories in org: {obj.org_name} by creation time asc and creating PRs.")
+        logger.info(f"Filtering repositories in org: {obj.org_name} by creation time asc and creating PRs.")
 
         for repo in obj.org.get_repos(direction="desc", sort="created", type="all"):
             repocount_tracker += 1
@@ -51,9 +51,9 @@ class PullRequestForNewRepos(PullRequestAutomationService):
 
             
 if __name__ == "__main__":
-    # logger.info("Starting pull request creation for Managed Services GitHub mirror automation...")
+    logger.info("Starting pull request creation for Managed Services GitHub mirror automation...")
 
     pr_service = PullRequestForNewRepos()
     pr_service.create_prs_in_batches()
 
-    # logger.info('Successfuly completed PR generation for this run..🎉🎉🎉 ')
+    logger.info('Successfuly completed PR generation for this run..🎉🎉🎉 ')

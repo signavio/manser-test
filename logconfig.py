@@ -1,8 +1,13 @@
+import os
+import logging.config
+import logging.handlers
+import structlog
+
 def configure_logging():
     """Configures structured logging.
     """
-    import logging.config
-    import structlog
+    log_directory = "logs"
+    os.makedirs(log_directory, exist_ok=True)
 
     logging.config.dictConfig({
         "version": 1,
@@ -15,7 +20,7 @@ def configure_logging():
             "file": {
                 "level": "DEBUG",
                 "class": "logging.handlers.RotatingFileHandler",
-                "filename": "logs/manser-prgen-script.log",
+                "filename": os.path.join(log_directory, "manser-prgen-script.log"),
                 "maxBytes": 5242880,
                 "backupCount": 3,
             },
