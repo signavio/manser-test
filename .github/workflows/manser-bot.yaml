@@ -17,10 +17,13 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
+        
+    - name: Install dependencies
+      run: pip install -r requirements.txt
 
-    - name: Manser Bot PR Gen
-      id: get_workflow_token 
-      with:
+    - name: Run Python script
+      run: python dummy.py
+      env:
         application_id: ${{ secrets.MANSER_BOT_APPLICATION_ID }}
         application_private_key: ${{ secrets.MANSER_BOT_APPLICATION_PRIVATE_KEY }}
 
