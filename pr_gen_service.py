@@ -6,6 +6,8 @@ from git import Repo, GitCommandError, RemoteProgress
 from github import Github ,GithubApp
 from dotenv import load_dotenv
 from github.GithubException import GithubException
+import jwt
+import time
 
 configure_logging()
 logger = structlog.get_logger(__name__)
@@ -51,6 +53,25 @@ class PullRequestAutomationService(RemoteProgress):
         installation = app.get_installation(self.installation_id)
         access_token = installation.create_access_token()
         return access_token.token
+    
+    def create_access_token(self):
+        payload = {
+            # Issued at time
+            'iat': int(time.time()),
+            # JWT expiration time (10 minutes maximum)
+            'exp': int(time.time()) + 600,
+            # GitHub App's identifier
+            'iss': self.app_id
+        }
+
+        with open(self.private_key_path, 'rb') as pem_file:
+            signing_key = jwt.jwk_from_pem(pem_file.read())
+
+        # Create JWT
+        jwt_instance = jwt.JWT()
+        encoded_jwt = jwt_instance.encode(payload, signing_key, alg='RS256')
+
+        return encoded_jwt
 
     def commit_and_push(self):
         """Adds, commits and pushes files. It validates if no changes are there before commit and push.
@@ -274,6 +295,7 @@ class PullRequestAutomationService(RemoteProgress):
 if __name__ == "__main__":
     logger.info("Starting pull request creation for Managed Services GitHub mirror automation...")
 
+    access_token = PullRequestAutomationService.create_access_token()
     pr_service = PullRequestAutomationService()
     pr_service.create_prs_in_batches()
 
