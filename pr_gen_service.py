@@ -67,12 +67,12 @@ class PullRequestAutomationService(RemoteProgress):
             'iss': self.app_id
         }
 
-        with open(self.private_key_path, 'r') as pem_file:
-            signing_key = jwt.jwk_from_pem(pem_file.read())
+        # with open(self.private_key_path, 'r') as pem_file:
+        #     signing_key = jwt.jwk_from_pem(pem_file.read())
 
         # Create JWT
         jwt_instance = jwt.JWT()
-        encoded_jwt = jwt_instance.encode(payload, signing_key, alg='RS256')
+        encoded_jwt = jwt_instance.encode(payload, self.private_key_path, alg='RS256')
 
         return encoded_jwt
 
