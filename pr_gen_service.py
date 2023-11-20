@@ -1,3 +1,4 @@
+import secrets
 import shutil
 import os
 import structlog
@@ -49,7 +50,8 @@ class PullRequestAutomationService(RemoteProgress):
 
     def get_github_app_token(self):
         """Get GitHub App installation token."""
-        private_key = open(self.private_key_path).read()
+        private_key_secret_name = 'MANSER_BOT_APPLICATION_PRIVATE_KEY'
+        private_key = secrets.get_secret(private_key_secret_name)
         app = GithubApp(self.app_id, private_key)
         installation = app.get_installation(self.installation_id)
         access_token = installation.create_access_token()
