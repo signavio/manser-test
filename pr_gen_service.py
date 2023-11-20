@@ -33,7 +33,7 @@ class PullRequestAutomationService(RemoteProgress):
         self.base_branch_name = None
         self.org_name = os.getenv("GITHUB_ORG")
         logger.info("Authenticating...")
-        self.org = self.token.get_organization(self.org_name)
+        self.org = self.authenticate_github()
         # self.org = "signavio"
         self.jira_ticket = os.getenv('JIRA_TICKET')
         self.branch_name = os.getenv('BRANCH_NAME_PREFIX') + os.getenv('JIRA_TICKET') + os.getenv('BRANCH_NAME_SUFFIX')
@@ -45,19 +45,27 @@ class PullRequestAutomationService(RemoteProgress):
         
         self.app_id = sys.argv[1]
         self.private_key_path = sys.argv[2]
-        # self.installation_id = int(os.environ.get('MANSER_BOT_INSTALLATION_ID'))
+        self.installation_id = sys.argv[3]
         print(self.app_id)
         print(self.private_key_path)
-        self.token = self.create_access_token()
+        self.token = self.get_github_app_token()
         logger.info("Initialisation completed")
 
-    # def get_github_app_token(self):
-    #     """Get GitHub App installation token."""
-    #     github_instance = Github(self.token)
-    #     app = GithubApp(self.app_id, self.private_key_path)
-    #     # installation = app.get_installation(self.installation_id)
-    #     # access_token = installation.create_access_token()
-    #     return app.token
+    def authenticate_github(self):
+        try:
+            app_token = self.get_github_app_token()
+            github_instance = Github(app_token)
+            org = github_instance.get_organization(self.org_name)
+            return org
+        except GithubException as e:
+            logger.error(f"GitHub authentication error: {e}")
+            raise
+        
+    def get_github_app_token(self):
+        app = GithubApp(self.app_id, self.private_key_path)
+        installation = app.get_installation(self.installation_id)
+        access_token = installation.create_access_token()
+        return access_token.token
     
     def create_access_token(self):
         payload = {

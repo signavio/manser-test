@@ -22,5 +22,5 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Run Python script
-      run: python dummy.py "${{ secrets.MANSER_BOT_APPLICATION_ID }}" "${{ secrets.MANSER_BOT_APPLICATION_PRIVATE_KEY }}"
+      run: python dummy.py "${{ secrets.MANSER_BOT_APPLICATION_ID }}" "${{ secrets.MANSER_BOT_APPLICATION_PRIVATE_KEY }}" "${{ secrets.MANSER_BOT_INSTALLATION_ID }}"
 
