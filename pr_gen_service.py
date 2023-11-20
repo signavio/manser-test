@@ -46,6 +46,8 @@ class PullRequestAutomationService(RemoteProgress):
         self.app_id = sys.argv[1]
         self.private_key_path = sys.argv[2]
         # self.installation_id = int(os.environ.get('MANSER_BOT_INSTALLATION_ID'))
+        print(self.app_id)
+        print(self.private_key_path)
         self.token = self.create_access_token()
         logger.info("Initialisation completed")
 
