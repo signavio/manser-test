@@ -73,9 +73,9 @@ class PullRequestAutomationService(RemoteProgress):
         #     signing_key = jwt.jwk_from_pem(pem_file.read())
 
         # Create JWT
-        jwt_instance = jwt.JWT()
-        encoded_jwt = jwt_instance.encode(payload, self.private_key_path, alg='RS256')
-
+        # jwt_instance = jwt.JWT()
+        encoded_jwt = jwt.encode(payload, self.private_key_path, algorithm='RS256')
+        
         return encoded_jwt
 
     def commit_and_push(self):
