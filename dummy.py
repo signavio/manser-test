@@ -61,7 +61,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
 if __name__ == "__main__":
     logger.info("Starting pull request creation for Managed Services GitHub mirror automation...")
 
-    pr_service = PullRequestForNewRepos(self.app_id_value,)
+    pr_service = PullRequestForNewRepos()
     # pr_service.base_branch_name = "main"
     pr_service.create_prs_in_batches()
 
