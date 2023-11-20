@@ -43,8 +43,8 @@ class PullRequestAutomationService(RemoteProgress):
         self.git_pr_title = os.getenv('GIT_PR_TITLE')
         self.git_pr_test = os.getenv('GIT_PR_TEST')
         
-        self.app_id = sys.argv[2]
-        self.private_key_path = sys.argv[1]
+        self.app_id = sys.argv[1]
+        self.private_key_path = sys.argv[2]
         # self.installation_id = int(os.environ.get('MANSER_BOT_INSTALLATION_ID'))
         self.token = self.create_access_token()
         logger.info("Initialisation completed")
@@ -67,8 +67,8 @@ class PullRequestAutomationService(RemoteProgress):
             'iss': self.app_id
         }
 
-        with open(self.private_key_path, 'rb') as pem_file:
-            signing_key = jwt.jwk_from_pem(pem_file.read())
+        # with open(self.private_key_path, 'rb') as pem_file:
+        signing_key = jwt.jwk_from_pem(self.private_key_path)
 
         # Create JWT
         jwt_instance = jwt.JWT()
