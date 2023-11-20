@@ -46,9 +46,7 @@ class PullRequestAutomationService(RemoteProgress):
         self.app_id = sys.argv[1]
         self.private_key_path = sys.argv[2]
         self.installation_id = sys.argv[3]
-        print(self.app_id)
-        print(self.private_key_path)
-        self.token = self.get_github_app_token()
+        self.token = self.authenticate_github()
         logger.info("Initialisation completed")
 
     def authenticate_github(self):
@@ -56,7 +54,7 @@ class PullRequestAutomationService(RemoteProgress):
             app_token = self.get_github_app_token()
             github_instance = Github(app_token)
             org = github_instance.get_organization(self.org_name)
-            return org
+            return org ,app_token
         except GithubException as e:
             logger.error(f"GitHub authentication error: {e}")
             raise
