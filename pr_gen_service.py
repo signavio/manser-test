@@ -44,13 +44,13 @@ class PullRequestAutomationService(RemoteProgress):
         
         self.app_id = int(os.environ.get('MANSER_BOT_APPLICATION_ID'))
         self.private_key_path = os.environ.get('MANSER_BOT_APPLICATION_PRIVATE_KEY')
-        self.installation_id = int(os.environ.get('MANSER_BOT_INSTALLATION_ID'))
+        # self.installation_id = int(os.environ.get('MANSER_BOT_INSTALLATION_ID'))
         self.token = self.get_github_app_token()
         logger.info("Initialisation completed")
 
     def get_github_app_token(self):
         """Get GitHub App installation token."""
-        app = GithubApp(self.app_id, self.private_key_path, self.installation_id)
+        app = GithubApp(self.app_id, self.private_key_path)
         # installation = app.get_installation(self.installation_id)
         # access_token = installation.create_access_token()
         return app.token
