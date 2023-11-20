@@ -42,7 +42,7 @@ class PullRequestAutomationService(RemoteProgress):
         self.git_pr_title = os.getenv('GIT_PR_TITLE')
         self.git_pr_test = os.getenv('GIT_PR_TEST')
         
-        self.app_id = int(os.environ.get('MANSER_BOT_APPLICATION_ID'))
+        self.app_id = os.environ.get('MANSER_BOT_APPLICATION_ID')
         self.private_key_path = os.environ.get('MANSER_BOT_APPLICATION_PRIVATE_KEY')
         # self.installation_id = int(os.environ.get('MANSER_BOT_INSTALLATION_ID'))
         self.token = self.get_github_app_token()
