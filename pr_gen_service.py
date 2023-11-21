@@ -33,7 +33,7 @@ class PullRequestAutomationService(RemoteProgress):
         self.base_branch_name = None
         self.org_name = os.getenv("GITHUB_ORG")
         logger.info("Authenticating...")
-        self.org = self.authenticate_github()
+        # self.org = self.authenticate_github()
         # self.org = "signavio"
         self.jira_ticket = os.getenv('JIRA_TICKET')
         self.branch_name = os.getenv('BRANCH_NAME_PREFIX') + os.getenv('JIRA_TICKET') + os.getenv('BRANCH_NAME_SUFFIX')
@@ -45,7 +45,7 @@ class PullRequestAutomationService(RemoteProgress):
         self.app_id = sys.argv[1]
         self.private_key_path = sys.argv[2]
         self.installation_id = sys.argv[3]
-        self.token = self.authenticate_github()
+        self.org, self.app_token = self.authenticate_github()
         logger.info("Initialisation completed")
 
     def authenticate_github(self):
