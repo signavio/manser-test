@@ -1,3 +1,4 @@
+import base64
 import secrets
 import shutil
 import os
@@ -5,7 +6,7 @@ import sys
 import structlog
 from logconfig import configure_logging
 from git import Repo, GitCommandError, RemoteProgress
-from github import Github ,GithubApp
+from github import Github ,GithubApp, GithubIntegration
 from dotenv import load_dotenv
 from github.GithubException import GithubException
 import jwt
@@ -45,43 +46,51 @@ class PullRequestAutomationService(RemoteProgress):
         self.app_id = sys.argv[1]
         self.private_key_path = sys.argv[2]
         self.installation_id = sys.argv[3]
-        self.org, self.app_token = self.authenticate_github()
+        self.org, self.token = self.authenticate_github()
         logger.info("Initialisation completed")
 
     def authenticate_github(self):
         try:
-            app_token = self.get_github_app_token()
-            github_instance = Github(app_token)
+            token = self.get_github_app_token()
+            github_instance = Github(token)
             org = github_instance.get_organization(self.org_name)
-            return org ,app_token
+            return org ,token
         except GithubException as e:
             logger.error(f"GitHub authentication error: {e}")
             raise
         
     def get_github_app_token(self):
-        app = GithubApp(self.app_id, self.private_key_path)
-        installation = app.get_installation(self.installation_id)
-        access_token = installation.create_access_token()
-        return access_token.token
-    
-    def create_access_token(self):
-        payload = {
-            # Issued at time
-            'iat': int(time.time()),
-            # JWT expiration time (10 minutes maximum)
-            'exp': int(time.time()) + 600,
-            # GitHub App's identifier
-            'iss': self.app_id
-        }
-
-        # with open(self.private_key_path, 'r') as pem_file:
-        #     signing_key = jwt.jwk_from_pem(pem_file.read())
-
-        # Create JWT
-        # jwt_instance = jwt.JWT()
-        encoded_jwt = jwt.encode(payload, self.private_key_path, algorithm='RS256')
+        id = self.app_id
+        private_key = base64.b64decode(self.private_key_path)
+        app = GithubIntegration(id, private_key)
+        installation=self.installation_id
+        tok = app.get_access_token(installation)
+        return tok
         
-        return encoded_jwt
+    # def get_github_app_token(self):
+    #     app = Github(self.app_id, self.private_key_path)
+    #     installation = app.get_installation(self.installation_id)
+    #     access_token = installation.create_access_token()
+    #     return access_token.token
+    
+    # def create_access_token(self):
+    #     payload = {
+    #         # Issued at time
+    #         'iat': int(time.time()),
+    #         # JWT expiration time (10 minutes maximum)
+    #         'exp': int(time.time()) + 600,
+    #         # GitHub App's identifier
+    #         'iss': self.app_id
+    #     }
+
+    #     # with open(self.private_key_path, 'r') as pem_file:
+    #     #     signing_key = jwt.jwk_from_pem(pem_file.read())
+
+    #     # Create JWT
+    #     # jwt_instance = jwt.JWT()
+    #     encoded_jwt = jwt.encode(payload, self.private_key_path, algorithm='RS256')
+        
+    #     return encoded_jwt
 
     def commit_and_push(self):
         """Adds, commits and pushes files. It validates if no changes are there before commit and push.
