@@ -31,12 +31,8 @@ class PullRequestAutomationService(RemoteProgress):
     def __init__(self):
         logger.info("Loading environment variables...")
         load_dotenv()
-        # self.token = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
-        # self.base_branch_name = None
         self.org_name = os.getenv("GITHUB_ORG")
         logger.info("Authenticating...")
-        # self.org = self.authenticate_github()
-        # self.org = "signavio"
         self.jira_ticket = os.getenv('JIRA_TICKET')
         self.branch_name = os.getenv('BRANCH_NAME_PREFIX') + os.getenv('JIRA_TICKET') + os.getenv('BRANCH_NAME_SUFFIX')
         self.repo_count = int(os.getenv('REPO_COUNT'))
@@ -59,13 +55,7 @@ class PullRequestAutomationService(RemoteProgress):
         except GithubException as e:
             logger.error(f"GitHub authentication error: {e}")
             raise
-
         
-    # def get_github_app_token(self):
-    #     app = Github(self.app_id, self.private_key_path)
-    #     installation = app.get_installation(self.installation_id)
-    #     access_token = installation.create_access_token()
-    #     return access_token.token
     
     def create_access_token(self):
         payload = {
@@ -76,12 +66,7 @@ class PullRequestAutomationService(RemoteProgress):
             # GitHub App's identifier
             'iss': self.app_id
         }
-
-        # with open(self.private_key_path, 'r') as pem_file:
-        #     signing_key = jwt.jwk_from_pem(pem_file.read())
-
-        # Create JWT
-        # jwt_instance = jwt.JWT()
+        
         encoded_jwt = jwt.encode(payload, self.private_key_path, algorithm='RS256')
         
         response = requests.post(
@@ -172,13 +157,13 @@ class PullRequestAutomationService(RemoteProgress):
         else:
             raise error
 
-    def clone_repository(self, repo_name):
+    def clone_repository(self, repo_name,repo_clone_url):
         """Clones current repository to the temp directory. Will not proceed with clone if already exisits error is thrown.
         :param repo_name: string
         """
         logger.info(f"Cloning repository {repo_name}")
         try:
-            Repo.clone_from(self.repo_git_link, self.repo_dir)
+            Repo.clone_from(repo_clone_url, self.repo_dir)
         except GitCommandError as e:
             self.validate_and_throw_err("already exists and is not an empty directory", "Repository not empty, not proceeding with cloning.", e)
 
