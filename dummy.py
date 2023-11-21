@@ -38,7 +38,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
 
         for repo in self.org.get_repos(direction="desc", sort="created", type="all"):
             repocount_tracker += 1
-            if repo == "manser-test":
+            if repo == "Manser-repo-trigger-prgen":
                 creation_date = repo.created_at.replace(tzinfo=None)
 
                 if creation_date >= cutoff_date:
