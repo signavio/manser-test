@@ -22,9 +22,9 @@ class PullRequestForNewRepos(PullRequestAutomationService):
     def __init__(self, app_id, private_key_path, installation_id ):
         super().__init__(self, app_id, private_key_path, installation_id)
 
-        self.app_id_value = app_id
-        self.private_key_path_value = private_key_path
-        self.installation_id_value = installation_id
+        self.app_id = app_id
+        self.private_key_path = private_key_path
+        self.installation_id = installation_id
             
     def create_prs_in_batches(self):  
         """Creates PRs for repositories created within the last 30 days.
