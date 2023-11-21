@@ -32,16 +32,19 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         """
         cutoff_date = datetime.now() - timedelta(days=60)
         repocount_tracker = 0
+        repo_within_30_days= []
+        total_repos= len(repo_within_30_days)
 
         logger.info(f"Filtering repositories in org: {self.org} by creation time asc and creating PRs.")
         print(type(self.org))
 
         for repo in self.org.get_repos(direction="desc", sort="created", type="all"):
-            repocount_tracker += 1
             if repo == "Manser-repo-trigger-prgen":
                 creation_date = repo.created_at.replace(tzinfo=None)
 
                 if creation_date >= cutoff_date:
+                    repocount_tracker += 1
+                    repo_within_30_days(repo)
                     try:
                         self.set_gitlink_n_repopath(repo.name)
                         self.clone_repository(repo.name)
@@ -50,9 +53,9 @@ class PullRequestForNewRepos(PullRequestAutomationService):
                 
                     except GithubException as e:
                         raise e
-                
+        
     # Check if all PRs are done for all repositories in the organization
-        self.check_if_all_prs_done(repocount_tracker, total_repos=1)
+        self.check_if_all_prs_done(repocount_tracker, total_repos)
 
             
 if __name__ == "__main__":
