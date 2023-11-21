@@ -58,39 +58,32 @@ class PullRequestAutomationService(RemoteProgress):
         except GithubException as e:
             logger.error(f"GitHub authentication error: {e}")
             raise
+
         
     def get_github_app_token(self):
-        id = self.app_id
-        private_key = base64.b64decode(self.private_key_path)
-        app = GithubIntegration(id, private_key)
-        installation=self.installation_id
-        tok = app.get_access_token(installation)
-        return tok.token
-        
-    # def get_github_app_token(self):
-    #     app = Github(self.app_id, self.private_key_path)
-    #     installation = app.get_installation(self.installation_id)
-    #     access_token = installation.create_access_token()
-    #     return access_token.token
+        app = GithubIntegration(self.app_id, self.private_key_path)
+        installation = app.get_installation(self.installation_id)
+        access_token = installation.create_access_token()
+        return access_token.token
     
-    # def create_access_token(self):
-    #     payload = {
-    #         # Issued at time
-    #         'iat': int(time.time()),
-    #         # JWT expiration time (10 minutes maximum)
-    #         'exp': int(time.time()) + 600,
-    #         # GitHub App's identifier
-    #         'iss': self.app_id
-    #     }
+    def create_access_token(self):
+        payload = {
+            # Issued at time
+            'iat': int(time.time()),
+            # JWT expiration time (10 minutes maximum)
+            'exp': int(time.time()) + 600,
+            # GitHub App's identifier
+            'iss': self.app_id
+        }
 
-    #     # with open(self.private_key_path, 'r') as pem_file:
-    #     #     signing_key = jwt.jwk_from_pem(pem_file.read())
+        # with open(self.private_key_path, 'r') as pem_file:
+        #     signing_key = jwt.jwk_from_pem(pem_file.read())
 
-    #     # Create JWT
-    #     # jwt_instance = jwt.JWT()
-    #     encoded_jwt = jwt.encode(payload, self.private_key_path, algorithm='RS256')
+        # Create JWT
+        # jwt_instance = jwt.JWT()
+        encoded_jwt = jwt.encode(payload, self.private_key_path, algorithm='RS256')
         
-    #     return encoded_jwt
+        return encoded_jwt
 
     def commit_and_push(self):
         """Adds, commits and pushes files. It validates if no changes are there before commit and push.
