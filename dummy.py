@@ -21,6 +21,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
     
     def __init__(self, app_id, private_key_path, installation_id ):
         super().__init__()
+        print("Hello1")
 
         self.app_id_value = app_id
         self.private_key_path_value = private_key_path
@@ -57,7 +58,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
             
 if __name__ == "__main__":
     logger.info("Starting pull request creation for Managed Services GitHub mirror automation...")
-
+    print("Hello")
     pr_service = PullRequestForNewRepos(app_id = sys.argv[1], private_key_path = sys.argv[2], installation_id= sys.argv[3])
     # pr_service.base_branch_name = "main"
     pr_service.create_prs_in_batches()
