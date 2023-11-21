@@ -20,7 +20,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
     # logger = structlog.get_logger(__name__) 
     
     def __init__(self, app_id, private_key_path, installation_id ):
-        super().__init__(self, app_id, private_key_path, installation_id)
+        super().__init__(self)
 
         self.app_id_value = app_id
         self.private_key_path_value = private_key_path
