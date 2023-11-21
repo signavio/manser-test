@@ -3,6 +3,7 @@ import secrets
 import shutil
 import os
 import sys
+import requests
 import structlog
 from logconfig import configure_logging
 from git import Repo, GitCommandError, RemoteProgress
@@ -51,7 +52,7 @@ class PullRequestAutomationService(RemoteProgress):
 
     def authenticate_github(self):
         try:
-            token = self.get_github_app_token()
+            token = self.create_access_token()
             github_instance = Github(token)
             org = github_instance.get_organization(self.org_name)
             return org ,token
@@ -60,11 +61,11 @@ class PullRequestAutomationService(RemoteProgress):
             raise
 
         
-    def get_github_app_token(self):
-        app = GithubApp(self.app_id, self.private_key_path)
-        installation = app.get_installation(self.installation_id)
-        access_token = installation.create_access_token()
-        return access_token.token
+    # def get_github_app_token(self):
+    #     app = Github(self.app_id, self.private_key_path)
+    #     installation = app.get_installation(self.installation_id)
+    #     access_token = installation.create_access_token()
+    #     return access_token.token
     
     def create_access_token(self):
         payload = {
@@ -83,7 +84,16 @@ class PullRequestAutomationService(RemoteProgress):
         # jwt_instance = jwt.JWT()
         encoded_jwt = jwt.encode(payload, self.private_key_path, algorithm='RS256')
         
-        return encoded_jwt
+        response = requests.post(
+        f"https://api.github.com/app/installations/{self.installation_id}/access_tokens",
+        headers={
+            "Accept": "application/vnd.github+json",
+            "Authorization": f"Bearer {encoded_jwt}",
+        },
+        timeout=60,
+        )
+
+        return response.json()["token"]
 
     def commit_and_push(self):
         """Adds, commits and pushes files. It validates if no changes are there before commit and push.
