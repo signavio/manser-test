@@ -61,7 +61,7 @@ class PullRequestAutomationService(RemoteProgress):
 
         
     def get_github_app_token(self):
-        app = GithubIntegration(self.app_id, self.private_key_path)
+        app = GithubApp(self.app_id, self.private_key_path)
         installation = app.get_installation(self.installation_id)
         access_token = installation.create_access_token()
         return access_token.token
