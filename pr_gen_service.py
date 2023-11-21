@@ -26,7 +26,7 @@ class PullRequestAutomationService(RemoteProgress):
     GITHUB_REMOTE = "git@github.com:"
     ORIGIN = "origin"
 
-    def __init__(self):
+    def __init__(self, a, b, c):
         logger.info("Loading environment variables...")
         load_dotenv()
         # self.token = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
@@ -42,7 +42,6 @@ class PullRequestAutomationService(RemoteProgress):
         self.git_commit_msg = os.getenv('GIT_COMMIT_MSG')
         self.git_pr_title = os.getenv('GIT_PR_TITLE')
         self.git_pr_test = os.getenv('GIT_PR_TEST')
-        
         self.app_id = sys.argv[1]
         self.private_key_path = sys.argv[2]
         self.installation_id = sys.argv[3]
