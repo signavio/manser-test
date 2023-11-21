@@ -44,7 +44,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
 
                 if creation_date >= cutoff_date:
                     repocount_tracker += 1
-                    repo_within_30_days(repo)
+                    repo_within_30_days(repo.name)
                     try:
                         self.set_gitlink_n_repopath(repo.name)
                         self.clone_repository(repo.name)
