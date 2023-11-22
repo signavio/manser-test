@@ -180,7 +180,7 @@ class PullRequestAutomationService(RemoteProgress):
         """Set the repository path to temp directory and coins git repo link.
         :param repo_name: string
         """
-        self.repo_git_link = f"https://x-access-token:{self.token}@github.com:{self.org_name}/{repo_name}.git"
+        self.repo_git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo_name}.git"
         logger.info(f"Current git repo link: {self.repo_git_link}")
         curr_dirr = os.getcwd()
         logger.info(f"Current dir: {curr_dirr}")
