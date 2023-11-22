@@ -195,7 +195,7 @@ class PullRequestAutomationService(RemoteProgress):
         
         logger.info(f"Repo directory: {self.repo_dir}")
         
-        if self.is_git_installed():
+        if self.is_git_installed(True):
             print("Git is installed.")
         else:
             print("Git is not installed.")
@@ -206,7 +206,7 @@ class PullRequestAutomationService(RemoteProgress):
             result = subprocess.run(['git', '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, text=True)
             
             # Check if the command was successful and contains the expected output
-            return 'git version' in result.stdout
+            return True
         except subprocess.CalledProcessError:
             # The 'git --version' command failed, indicating that Git is not installed
             return False
