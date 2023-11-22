@@ -47,7 +47,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
                     repo_within_30_days.extend(repo.name)
                     try:
                         self.set_gitlink_n_repopath(repo.name)
-                        self.clone_repository(repo.name,repo.clone_url)
+                        self.clone_repository(repo.name)
                         self.commit_and_push()
                         self.create_pr(repo,repo.default_branch)
                 
