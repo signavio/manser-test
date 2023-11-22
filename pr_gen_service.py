@@ -186,7 +186,7 @@ class PullRequestAutomationService(RemoteProgress):
         tmp_dir = os.path.join(curr_dirr, "tmp")
         os.makedirs(tmp_dir, exist_ok=True)
         
-        self.repo_dir = os.path.join(curr_dirr, "tmp/")   #+ self.get_clone_dir() + repo_name
+        self.repo_dir = os.path.join(curr_dirr, "tmp")   #+ self.get_clone_dir() + repo_name
         
         logger.info(f"Repo directory: {self.repo_dir}")
 
