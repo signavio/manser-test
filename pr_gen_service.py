@@ -165,12 +165,12 @@ class PullRequestAutomationService(RemoteProgress):
         # self.repo_git_links = repo_clone_url
         logger.info(f"Cloning repository {repo_name}")
         try:
-            # print(os.getcwd())
-            # os.chdir(self.repo_dir)
-            # print(os.getcwd())
+            print(os.getcwd())
+            os.chdir(self.repo_dir)
+            print(os.getcwd())
             Repo.clone_from(self.repo_git_link, self.repo_dir)
-            # os.chdir("..")
-            # print(os.getcwd())
+            os.chdir("..")
+            print(os.getcwd())
         except GitCommandError as e:
             self.validate_and_throw_err("already exists and is not an empty directory", "Repository not empty, not proceeding with cloning.", e)
 
