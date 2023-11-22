@@ -91,14 +91,17 @@ class PullRequestAutomationService(RemoteProgress):
         logger.info(f"Branch name: {self.branch_name}")
 
         dir_to_sync = os.getenv('DIR_TO_SYNC')
+        # dir_to_sync = os.getcwd() + ".github"
         print(dir_to_sync)
         if not dir_to_sync == '':
             repo_dir_path = os.path.join(self.repo_dir, dir_to_sync)
+            print(f'a = {repo_dir_path}')
         else:
             repo_dir_path = self.repo_dir
+            print(f'b = {repo_dir_path}')
 
         logger.info(f"New files to be send in PR will be copied under dir: {repo_dir_path}")
-        curr_dir = self.repo_dir
+        curr_dir = os.getcwd()
         logger.info(f"Current dir: {curr_dir}")
         dir_name = os.path.join(curr_dir, file_to_sync)
 
