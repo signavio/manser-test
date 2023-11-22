@@ -174,7 +174,7 @@ class PullRequestAutomationService(RemoteProgress):
         :param repo_name: string
         """
         # self.repo_git_link = self.GITHUB_REMOTE + self.org_name + "/" + repo_name + ".git"
-        self.repo_git_link = "https://x-access-token:{self.token}@github.com/{self.org}/{repo_name}.git"
+        self.repo_git_link = f"https://x-access-token:{self.token}@github.com/{self.org}/{repo_name}.git"
         logger.info(f"Current git repo link: {self.repo_git_link}")
         self.repo_dir = self.get_clone_dir() + repo_name
         logger.info(f"Repo directory: {self.repo_dir}")
