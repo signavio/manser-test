@@ -182,6 +182,7 @@ class PullRequestAutomationService(RemoteProgress):
         path_parts = "/".join(list((os.getcwd()).split('/')[0:-1]))
         print(path_parts)
         self.repo_dir = os.path.join(*path_parts, self.get_clone_dir(), repo_name)
+        print(self.repo_dir)
         logger.info(f"Repo directory: {self.repo_dir}")
 
     def get_clone_dir(self):
