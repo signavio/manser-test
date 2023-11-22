@@ -182,18 +182,12 @@ class PullRequestAutomationService(RemoteProgress):
         """
         self.repo_git_link = f"https://x-access-token:{self.token}@github.com:{self.org_name}/{repo_name}.git"
         logger.info(f"Current git repo link: {self.repo_git_link}")
-        self.repo_dir = self.get_clone_dir() + repo_name
-        logger.info(f"Repo directory: {self.repo_dir}")
-        # self.repo_git_link = self.GITHUB_REMOTE + self.org_name + "/" + repo_name + ".git"
-        # self.repo_git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo_name}.git"
-        # # self.repo_git_link = f"https://x-access-token:{self.token}@github.com:{self.org_name}/{repo_name}.git"
-        # logger.info(f"Current git repo link: {self.repo_git_link}")
-        # curr_dirr = os.getcwd()
-        # logger.info(f"Current dir: {curr_dirr}")
+        curr_dirr = os.getcwd()
+        logger.info(f"Current dir: {curr_dirr}")
         
         # # tmp_dir = os.path.join(curr_dirr, "tmp")
-        # self.repo_dir = os.path.join(curr_dirr, "tmp")
-        # os.makedirs(self.repo_dir, exist_ok=True)
+        self.repo_dir = os.path.join(curr_dirr, "tmp")
+        os.makedirs(self.repo_dir, exist_ok=True)
         # #+ self.get_clone_dir() + repo_name
         # os.chmod(self.repo_dir, 0o777)
         
