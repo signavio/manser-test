@@ -178,10 +178,13 @@ class PullRequestAutomationService(RemoteProgress):
         self.repo_git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo_name}.git"
         # self.repo_git_link = f"https://x-access-token:{self.token}@github.com:{self.org_name}/{repo_name}.git"
         logger.info(f"Current git repo link: {self.repo_git_link}")
-        # path = os.getcwd()
-        # path_parts = "/".join(list((os.getcwd()).split('/')[0:-1]))
-        # print(path_parts)
-        self.repo_dir = os.getcwd() + "/tmp/"     #+ self.get_clone_dir() + repo_name
+        curr_dirr = os.getcwd()
+        logger.info(f"Current dir: {curr_dirr}")
+        
+        tmp_dir = os.path.join(curr_dirr, "tmp")
+        os.makedirs(tmp_dir, exist_ok=True)
+        
+        self.repo_dir = os.path.join(curr_dirr, "tmp/")    #+ self.get_clone_dir() + repo_name
         
         logger.info(f"Repo directory: {self.repo_dir}")
 
