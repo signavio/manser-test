@@ -157,14 +157,14 @@ class PullRequestAutomationService(RemoteProgress):
         else:
             raise error
 
-    def clone_repository(self, repo_name, repo_clone_url):
+    def clone_repository(self, repo_name):
         """Clones current repository to the temp directory. Will not proceed with clone if already exisits error is thrown.
         :param repo_name: string
         """
-        self.repo_git_links = repo_clone_url
+        # self.repo_git_links = repo_clone_url
         logger.info(f"Cloning repository {repo_name}")
         try:
-            Repo.clone_from(self.repo_git_links, self.repo_dir)
+            Repo.clone_from(self.repo_git_link, self.repo_dir)
         except GitCommandError as e:
             self.validate_and_throw_err("already exists and is not an empty directory", "Repository not empty, not proceeding with cloning.", e)
 
@@ -175,7 +175,8 @@ class PullRequestAutomationService(RemoteProgress):
         :param repo_name: string
         """
         # self.repo_git_link = self.GITHUB_REMOTE + self.org_name + "/" + repo_name + ".git"
-        self.repo_git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo_name}.git"
+        # self.repo_git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo_name}.git"
+        self.repo_git_link = f"git@github.com:{self.org_name}/{repo_name}.git"
         logger.info(f"Current git repo link: {self.repo_git_link}")
         self.repo_dir = self.get_clone_dir() + repo_name
         logger.info(f"Repo directory: {self.repo_dir}")
