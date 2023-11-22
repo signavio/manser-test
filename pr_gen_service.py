@@ -165,12 +165,12 @@ class PullRequestAutomationService(RemoteProgress):
         # self.repo_git_links = repo_clone_url
         logger.info(f"Cloning repository {repo_name}")
         try:
-            print(os.getcwd())
-            os.chdir(self.repo_dir)
-            print(os.getcwd())
+            # print(os.getcwd())
+            # os.chdir(self.repo_dir)
+            # print(os.getcwd())
             Repo.clone_from(self.repo_git_link, self.repo_dir)
-            os.chdir("..")
-            print(os.getcwd())
+            # os.chdir("..")
+            # print(os.getcwd())
         except GitCommandError as e:
             self.validate_and_throw_err("already exists and is not an empty directory", "Repository not empty, not proceeding with cloning.", e)
 
@@ -180,18 +180,22 @@ class PullRequestAutomationService(RemoteProgress):
         """Set the repository path to temp directory and coins git repo link.
         :param repo_name: string
         """
-        # self.repo_git_link = self.GITHUB_REMOTE + self.org_name + "/" + repo_name + ".git"
-        self.repo_git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo_name}.git"
-        # self.repo_git_link = f"https://x-access-token:{self.token}@github.com:{self.org_name}/{repo_name}.git"
+        self.repo_git_link = f"https://x-access-token:{self.token}@github.com:{self.org_name}/{repo_name}.git"
         logger.info(f"Current git repo link: {self.repo_git_link}")
-        curr_dirr = os.getcwd()
-        logger.info(f"Current dir: {curr_dirr}")
+        self.repo_dir = self.get_clone_dir() + repo_name
+        logger.info(f"Repo directory: {self.repo_dir}")
+        # self.repo_git_link = self.GITHUB_REMOTE + self.org_name + "/" + repo_name + ".git"
+        # self.repo_git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo_name}.git"
+        # # self.repo_git_link = f"https://x-access-token:{self.token}@github.com:{self.org_name}/{repo_name}.git"
+        # logger.info(f"Current git repo link: {self.repo_git_link}")
+        # curr_dirr = os.getcwd()
+        # logger.info(f"Current dir: {curr_dirr}")
         
-        # tmp_dir = os.path.join(curr_dirr, "tmp")
-        self.repo_dir = os.path.join(curr_dirr, "tmp")
-        os.makedirs(self.repo_dir, exist_ok=True)
-        #+ self.get_clone_dir() + repo_name
-        os.chmod(self.repo_dir, 0o777)
+        # # tmp_dir = os.path.join(curr_dirr, "tmp")
+        # self.repo_dir = os.path.join(curr_dirr, "tmp")
+        # os.makedirs(self.repo_dir, exist_ok=True)
+        # #+ self.get_clone_dir() + repo_name
+        # os.chmod(self.repo_dir, 0o777)
         
         logger.info(f"Repo directory: {self.repo_dir}")
 
