@@ -12,6 +12,10 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      
+    - name: test  
+      run: |
+        echo "curr_dirr: ${pwd}" 
 
     - name: Set up Python
       uses: actions/setup-python@v4
