@@ -181,7 +181,7 @@ class PullRequestAutomationService(RemoteProgress):
         # path = os.getcwd()
         # path_parts = "/".join(list((os.getcwd()).split('/')[0:-1]))
         # print(path_parts)
-        self.repo_dir = "/home/runner/work/manser-test/manser-test" + self.get_clone_dir() + repo_name
+        self.repo_dir = os.getcwd() #+ self.get_clone_dir() + repo_name
         
         logger.info(f"Repo directory: {self.repo_dir}")
 
