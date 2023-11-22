@@ -2,6 +2,7 @@ import base64
 import secrets
 import shutil
 import os
+import subprocess
 import sys
 import requests
 import structlog
@@ -193,6 +194,22 @@ class PullRequestAutomationService(RemoteProgress):
         os.chmod(self.repo_dir, 0o777)
         
         logger.info(f"Repo directory: {self.repo_dir}")
+        
+        if self.is_git_installed():
+            print("Git is installed.")
+        else:
+            print("Git is not installed.")
+        
+    def is_git_installed():
+        try:
+            # Run the 'git --version' command and capture the output
+            result = subprocess.run(['git', '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, text=True)
+            
+            # Check if the command was successful and contains the expected output
+            return 'git version' in result.stdout
+        except subprocess.CalledProcessError:
+            # The 'git --version' command failed, indicating that Git is not installed
+            return False
 
     def get_clone_dir(self):
         """Creates a temp directory for cloning if not already present.
