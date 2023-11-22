@@ -180,7 +180,7 @@ class PullRequestAutomationService(RemoteProgress):
         logger.info(f"Current git repo link: {self.repo_git_link}")
         path = os.getcwd()
         path_parts = path.split(os.sep)
-        self.repo_dir = os.path.join(*path_parts, self.get_clone_dir(), repo_name)
+        self.repo_dir = os.path.join(path_parts, self.get_clone_dir(), repo_name)
         logger.info(f"Repo directory: {self.repo_dir}")
 
     def get_clone_dir(self):
