@@ -91,6 +91,7 @@ class PullRequestAutomationService(RemoteProgress):
         logger.info(f"Branch name: {self.branch_name}")
 
         dir_to_sync = os.getenv('DIR_TO_SYNC')
+        print(dir_to_sync)
         if not dir_to_sync == '':
             repo_dir_path = os.path.join(self.repo_dir, dir_to_sync)
         else:
