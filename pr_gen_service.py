@@ -97,7 +97,7 @@ class PullRequestAutomationService(RemoteProgress):
             repo_dir_path = self.repo_dir
 
         logger.info(f"New files to be send in PR will be copied under dir: {repo_dir_path}")
-        curr_dir = os.getcwd()
+        curr_dir = self.repo_dir
         logger.info(f"Current dir: {curr_dir}")
         dir_name = os.path.join(curr_dir, file_to_sync)
 
