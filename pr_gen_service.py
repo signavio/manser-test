@@ -194,22 +194,6 @@ class PullRequestAutomationService(RemoteProgress):
         os.chmod(self.repo_dir, 0o777)
         
         logger.info(f"Repo directory: {self.repo_dir}")
-        
-        if self.is_git_installed(True):
-            print("Git is installed.")
-        else:
-            print("Git is not installed.")
-        
-    def is_git_installed(self):
-        try:
-            # Run the 'git --version' command and capture the output
-            subprocess.run(['git', '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, text=True)
-            
-            # Check if the command was successful and contains the expected output
-            return True
-        except subprocess.CalledProcessError:
-            # The 'git --version' command failed, indicating that Git is not installed
-            return False
 
     def get_clone_dir(self):
         """Creates a temp directory for cloning if not already present.
