@@ -142,6 +142,8 @@ class PullRequestAutomationService(RemoteProgress):
             logger.info(diff)
 
             if not diff == '':
+                subprocess.run(['git', 'config', '--global', 'user.email', 'prateek.kesarwani@sap.com'], check=True)
+                subprocess.run(['git', 'config', '--global', 'user.name', 'Prateek Kesarwani'], check=True)
                 repo.git.pull
                 repo.git.commit('-m', self.git_commit_msg, None)
                 repo.git.push('-u', self.ORIGIN, self.branch_name)
