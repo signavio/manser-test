@@ -107,7 +107,7 @@ class PullRequestAutomationService(RemoteProgress):
         print(file_to_sync)
         
         # dir_name = os.path.join(curr_dir, file_to_sync)
-        dir_name = "/home/runner/work/manser-test/manser-test/.github/workflows/"
+        dir_name = "/home/runner/work/manser-test/manser-test/.github/workflows/git_mirror.yaml"
         print("Hello")
         print(dir_name)
         result = subprocess.run(['ls', '-a'], stdout=subprocess.PIPE, text=True)
@@ -119,7 +119,7 @@ class PullRequestAutomationService(RemoteProgress):
 
         try:
             os.makedirs(repo_dir_path, exist_ok=True)
-            shutil.copytree(dir_name, repo_dir_path, dirs_exist_ok=True)
+            shutil.copy(dir_name, repo_dir_path, dirs_exist_ok=True)
             logger.info('GitHub action locally copied successfully to temp repo.')
             self.remove_mac_metadatafile(repo_dir_path)
         except Exception as e:
