@@ -211,26 +211,24 @@ class PullRequestAutomationService(RemoteProgress):
             logger.info(f"Clone directory already exisits at {tmp_dir}")
         return tmp_dir
 
-    def create_pr(self, repo_default_branch, repo_name, repo):
+    def create_pr(self, repo):
         """Creates PR for the files newly added and the branch pushed.
         It validates if any open PR with the same jira ticket is already available in the repository.
         If not present if proceeds with PR creation.
         :param repo: class:`github.Repository.Repository`
         """
-        demo = repo.name
-        print(demo)
-        self.repo = self.github_instance.get_repo(repo_name)
-        self.base_branch_name = repo_default_branch
-        pull_requests = self.repo.get_pulls(state='open', sort='created', base=self.base_branch_name)
+        self.auth = self.github_instance.get_repo(repo.name)
+        self.base_branch_name = repo.default_branch
+        pull_requests = self.auth.get_pulls(state='open', sort='created', base=self.base_branch_name)
         pr_exists = False
 
         for pr in pull_requests:
             if self.jira_ticket in pr.body:
                 pr_exists = True
-                logger.info(f"PR number: {pr.number} already exists for the jira ticket: {self.jira_ticket} in repository: {repo_name}")
+                logger.info(f"PR number: {pr.number} already exists for the jira ticket: {self.jira_ticket} in repository: {repo.name}")
 
         if not pr_exists:
-            logger.info(f"Creating PR in repository: {repo_name}")
+            logger.info(f"Creating PR in repository: {repo.name}")
             pr_body = """
             Jira ticket: %s
             ### Changes made
@@ -239,7 +237,7 @@ class PullRequestAutomationService(RemoteProgress):
             2. %s
             """ % (self.jira_ticket, self.git_pr_title, self.git_pr_test)
 
-            pull_request = self.repo.create_pull(title = self.git_pr_title, body = pr_body, base = self.base_branch_name, head = self.branch_name)
+            pull_request = self.auth.create_pull(title = self.git_pr_title, body = pr_body, base = self.base_branch_name, head = self.branch_name)
 
             logger.info(f'PR successfuly created, PR number: {pull_request.number}🎉🎉 ')
             logger.info(f"PR title: {self.git_pr_title} ")
