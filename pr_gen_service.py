@@ -110,6 +110,12 @@ class PullRequestAutomationService(RemoteProgress):
         dir_name = file_to_sync
         print("Hello")
         print(dir_name)
+        result = subprocess.run(["ls"], stdout=subprocess.PIPE, text=True)
+        print(result)
+        results = subprocess.run(["pwd"], stdout=subprocess.PIPE, text=True)
+        print(results)
+        # /home/runner/work/<repository-name>/<repository-name>/.github
+        # /home/runner/work/manser-test/manser-test
 
         try:
             os.makedirs(repo_dir_path, exist_ok=True)
