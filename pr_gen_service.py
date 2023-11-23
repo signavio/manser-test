@@ -217,7 +217,8 @@ class PullRequestAutomationService(RemoteProgress):
         If not present if proceeds with PR creation.
         :param repo: class:`github.Repository.Repository`
         """
-        self.auth = self.github_instance.get_repo(repo.name)
+        repo_name = repo.name
+        self.auth = self.github_instance.get_repo(repo_name)
         self.base_branch_name = repo.default_branch
         pull_requests = self.auth.get_pulls(state='open', sort='created', base=self.base_branch_name)
         pr_exists = False
