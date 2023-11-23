@@ -49,7 +49,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
                         self.set_gitlink_n_repopath(repo.name)
                         self.clone_repository(repo.name)
                         self.commit_and_push()
-                        self.create_pr(repo, repo.default_branch, repo.name) 
+                        self.create_pr(repo.default_branch, repo.name) 
                 
                     except GithubException as e:
                         raise e
