@@ -221,6 +221,7 @@ class PullRequestAutomationService(RemoteProgress):
         self.auth = self.github_instance.get_repo(repo_name)
         self.base_branch_name = repo.default_branch
         pull_requests = self.auth.get_pulls(state='open', sort='created', base=self.base_branch_name)
+        print(pull_requests)
         pr_exists = False
 
         for pr in pull_requests:
