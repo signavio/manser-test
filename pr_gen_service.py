@@ -110,7 +110,7 @@ class PullRequestAutomationService(RemoteProgress):
         dir_name = file_to_sync
         print("Hello")
         print(dir_name)
-        result = subprocess.run(["ls -a"], stdout=subprocess.PIPE, text=True)
+        result = subprocess.run(['ls', '-a'], stdout=subprocess.PIPE, text=True)
         print(result)
         results = subprocess.run(["pwd"], stdout=subprocess.PIPE, text=True)
         print(results)
