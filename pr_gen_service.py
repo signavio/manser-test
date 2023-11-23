@@ -105,9 +105,9 @@ class PullRequestAutomationService(RemoteProgress):
         print(curr_dir)
         logger.info(f"Current dir: {curr_dir}")
         print(file_to_sync)
-        # os.makedirs()
-        dir_name = os.path.join(curr_dir, file_to_sync)
-        # dir_name = os.path.join(curr_dir, "/", file_to_sync)
+        
+        # dir_name = os.path.join(curr_dir, file_to_sync)
+        dir_name = file_to_sync
         print("Hello")
         print(dir_name)
 
