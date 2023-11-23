@@ -104,6 +104,7 @@ class PullRequestAutomationService(RemoteProgress):
         curr_dir = self.repo_dir
         logger.info(f"Current dir: {curr_dir}")
         dir_name = os.path.join(curr_dir, file_to_sync)
+        print(dir_name)
 
         try:
             os.makedirs(repo_dir_path, exist_ok=True)
