@@ -50,8 +50,8 @@ class PullRequestAutomationService(RemoteProgress):
     def authenticate_github(self):
         try:
             token = self.create_access_token()
-            github_instance = Github(token)
-            org = github_instance.get_organization(self.org_name)
+            self.github_instance = Github(token)
+            org = self.github_instance.get_organization(self.org_name)
             return org ,token
         except GithubException as e:
             logger.error(f"GitHub authentication error: {e}")
@@ -211,14 +211,15 @@ class PullRequestAutomationService(RemoteProgress):
             logger.info(f"Clone directory already exisits at {tmp_dir}")
         return tmp_dir
 
-    def create_pr(self, repo, repo_default_branch, repo_name, repo_get_pulls, repo_create_pull):
+    def create_pr(self, repo, repo_default_branch, repo_name):
         """Creates PR for the files newly added and the branch pushed.
         It validates if any open PR with the same jira ticket is already available in the repository.
         If not present if proceeds with PR creation.
         :param repo: class:`github.Repository.Repository`
         """
+        self.repo = self.github_instance.get_repo(repo_name)
         self.base_branch_name = repo_default_branch
-        pull_requests = repo_get_pulls(state='open', sort='created', base=self.base_branch_name)
+        pull_requests = self.repo.get_pulls(state='open', sort='created', base=self.base_branch_name)
         pr_exists = False
 
         for pr in pull_requests:
@@ -227,7 +228,7 @@ class PullRequestAutomationService(RemoteProgress):
                 logger.info(f"PR number: {pr.number} already exists for the jira ticket: {self.jira_ticket} in repository: {repo_name}")
 
         if not pr_exists:
-            logger.info(f"Creating PR in repository: {repo.name}")
+            logger.info(f"Creating PR in repository: {repo_name}")
             pr_body = """
             Jira ticket: %s
             ### Changes made
@@ -236,7 +237,7 @@ class PullRequestAutomationService(RemoteProgress):
             2. %s
             """ % (self.jira_ticket, self.git_pr_title, self.git_pr_test)
 
-            pull_request = repo_create_pull(title = self.git_pr_title, body = pr_body, base = self.base_branch_name, head = self.branch_name)
+            pull_request = self.repo.create_pull(title = self.git_pr_title, body = pr_body, base = self.base_branch_name, head = self.branch_name)
 
             logger.info(f'PR successfuly created, PR number: {pull_request.number}🎉🎉 ')
             logger.info(f"PR title: {self.git_pr_title} ")
