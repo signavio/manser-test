@@ -211,12 +211,14 @@ class PullRequestAutomationService(RemoteProgress):
             logger.info(f"Clone directory already exisits at {tmp_dir}")
         return tmp_dir
 
-    def create_pr(self, repo_default_branch, repo_name):
+    def create_pr(self, repo_default_branch, repo_name, repo):
         """Creates PR for the files newly added and the branch pushed.
         It validates if any open PR with the same jira ticket is already available in the repository.
         If not present if proceeds with PR creation.
         :param repo: class:`github.Repository.Repository`
         """
+        demo = repo.name
+        print(demo)
         self.repo = self.github_instance.get_repo(repo_name)
         self.base_branch_name = repo_default_branch
         pull_requests = self.repo.get_pulls(state='open', sort='created', base=self.base_branch_name)
