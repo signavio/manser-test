@@ -13,9 +13,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: test  
+    - name: Access .github folder
       run: |
-        echo "curr_dirr: ${pwd}" 
+        ls .github
 
     - name: Set up Python
       uses: actions/setup-python@v4
