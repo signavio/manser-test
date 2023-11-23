@@ -236,7 +236,7 @@ class PullRequestAutomationService(RemoteProgress):
             2. %s
             """ % (self.jira_ticket, self.git_pr_title, self.git_pr_test)
 
-            pull_request = repo.create_pull(self.git_pr_title, pr_body, self.base_branch_name, self.branch_name)
+            pull_request = repo.create_pull(title = self.git_pr_title, body = pr_body, base = self.base_branch_name, head = self.branch_name)
 
             logger.info(f'PR successfuly created, PR number: {pull_request.number}🎉🎉 ')
             logger.info(f"PR title: {self.git_pr_title} ")
