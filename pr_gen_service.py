@@ -232,7 +232,7 @@ class PullRequestAutomationService(RemoteProgress):
         :param repo: class:`github.Repository.Repository`
         """
         repo_name = repo.name
-        self.auth = self.github_instance.get_repo(repo_name)
+        self.auth = self.github_instance.get_repo(repo.name)
         self.base_branch_name = repo.default_branch
         pull_requests = self.auth.get_pulls(state='open', sort='created', base=self.base_branch_name)
         print(pull_requests)
