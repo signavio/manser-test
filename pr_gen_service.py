@@ -119,7 +119,7 @@ class PullRequestAutomationService(RemoteProgress):
 
         try:
             os.makedirs(repo_dir_path, exist_ok=True)
-            shutil.copytree(dir_name, repo_dir_path, dirs_exist_ok=True)
+            shutil.copy(dir_name, repo_dir_path)
             logger.info('GitHub action locally copied successfully to temp repo.')
             self.remove_mac_metadatafile(repo_dir_path)
         except Exception as e:
