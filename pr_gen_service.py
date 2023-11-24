@@ -101,12 +101,12 @@ class PullRequestAutomationService(RemoteProgress):
             # print(f'b = {repo_dir_path}')
 
         logger.info(f"New files to be send in PR will be copied under dir: {repo_dir_path}")
-        curr_dir = os.getcwd()
+        # curr_dir = os.getcwd()
         # print(curr_dir)
-        logger.info(f"Current dir: {curr_dir}")
+        logger.info(f"Current dir: {os.getcwd()}")
         # print(file_to_sync)
         
-        dir_name = os.path.join(curr_dir, self.file_to_sync)
+        dir_name = os.path.join(os.getcwd(), self.file_to_sync)
         print(f'xyz:{dir_name}')
         # dir_name = "/home/runner/work/manser-test/manser-test/.github/workflows/git_mirror.yaml"
         # print("Hello")
