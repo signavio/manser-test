@@ -107,7 +107,7 @@ class PullRequestAutomationService(RemoteProgress):
         print(file_to_sync)
         
         # dir_name = os.path.join(curr_dir, file_to_sync)
-        dir_name = "/home/runner/work/manser-test/manser-test/.github/workflows/git_mirror.yaml"
+        dir_name = "/home/runner/work/manser-test/manser-test/.github/workflows/"
         print("Hello")
         print(dir_name)
         result = subprocess.run(['ls', '-a'], stdout=subprocess.PIPE, text=True)
