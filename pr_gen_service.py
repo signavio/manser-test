@@ -87,7 +87,7 @@ class PullRequestAutomationService(RemoteProgress):
             This is then added, committed and pushed.
         """
         logger.info("Staging files...")
-        file_to_sync = os.getenv('FILE_TO_SYNC_PATH')
+        self.file_to_sync = os.getenv('FILE_TO_SYNC_PATH')
         logger.info(f"Branch name: {self.branch_name}")
 
         dir_to_sync = os.getenv('DIR_TO_SYNC')
@@ -106,8 +106,9 @@ class PullRequestAutomationService(RemoteProgress):
         logger.info(f"Current dir: {curr_dir}")
         # print(file_to_sync)
         
-        # dir_name = os.path.join(curr_dir, file_to_sync)
-        dir_name = "/home/runner/work/manser-test/manser-test/.github/workflows/git_mirror.yaml"
+        dir_name = os.path.join(curr_dir, file_to_sync)
+        print(dir_name)
+        # dir_name = "/home/runner/work/manser-test/manser-test/.github/workflows/git_mirror.yaml"
         # print("Hello")
         # print(dir_name)
         # result = subprocess.run(['ls', '-a'], stdout=subprocess.PIPE, text=True)
