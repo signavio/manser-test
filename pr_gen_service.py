@@ -107,7 +107,7 @@ class PullRequestAutomationService(RemoteProgress):
         # print(file_to_sync)
         
         dir_name = os.path.join(curr_dir, self.file_to_sync)
-        print(dir_name)
+        print(f'xyz:{dir_name}')
         # dir_name = "/home/runner/work/manser-test/manser-test/.github/workflows/git_mirror.yaml"
         # print("Hello")
         # print(dir_name)
