@@ -51,8 +51,8 @@ class PullRequestAutomationService(RemoteProgress):
         try:
             token = self.create_access_token()
             self.github_instance = Github(token)
-            org = self.github_instance.get_organization(self.org_name)
-            return org ,token
+            self.org = self.github_instance.get_organization(self.org_name)
+            return self.org ,token
         except GithubException as e:
             logger.error(f"GitHub authentication error: {e}")
             raise
@@ -110,9 +110,9 @@ class PullRequestAutomationService(RemoteProgress):
         dir_name = "/home/runner/work/manser-test/manser-test/.github/workflows/"
         # print("Hello")
         # print(dir_name)
-        result = subprocess.run(['ls', '-a'], stdout=subprocess.PIPE, text=True)
+        # result = subprocess.run(['ls', '-a'], stdout=subprocess.PIPE, text=True)
         # print(result)
-        results = subprocess.run(["pwd"], stdout=subprocess.PIPE, text=True)
+        # results = subprocess.run(["pwd"], stdout=subprocess.PIPE, text=True)
         # print(results)
         # /home/runner/work/<repository-name>/<repository-name>/.github
         # /home/runner/work/manser-test/manser-test
@@ -125,7 +125,7 @@ class PullRequestAutomationService(RemoteProgress):
         except Exception as e:
             logger.error('Directory not copied.')
             raise e
-
+        
         try:
             repo = Repo.init(self.repo_dir)
             try:
@@ -231,8 +231,8 @@ class PullRequestAutomationService(RemoteProgress):
         If not present if proceeds with PR creation.
         :param repo: class:`github.Repository.Repository`
         """
-        repo_name = repo.name
-        self.auth = self.github_instance.get_repo(repo.name)
+        # repo_name = repo.name
+        self.auth = self.org.get_repo(repo.name)
         self.base_branch_name = repo.default_branch
         pull_requests = self.auth.get_pulls(state='open', sort='created', base=self.base_branch_name)
         # print(pull_requests)
