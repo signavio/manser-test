@@ -92,28 +92,28 @@ class PullRequestAutomationService(RemoteProgress):
 
         dir_to_sync = os.getenv('DIR_TO_SYNC')
         # dir_to_sync = os.getcwd() + ".github"
-        print(dir_to_sync)
+        # print(dir_to_sync)
         if not dir_to_sync == '':
             repo_dir_path = os.path.join(self.repo_dir, dir_to_sync)
-            print(f'a = {repo_dir_path}')
+            # print(f'a = {repo_dir_path}')
         else:
             repo_dir_path = self.repo_dir
-            print(f'b = {repo_dir_path}')
+            # print(f'b = {repo_dir_path}')
 
         logger.info(f"New files to be send in PR will be copied under dir: {repo_dir_path}")
         curr_dir = os.getcwd()
-        print(curr_dir)
+        # print(curr_dir)
         logger.info(f"Current dir: {curr_dir}")
-        print(file_to_sync)
+        # print(file_to_sync)
         
         # dir_name = os.path.join(curr_dir, file_to_sync)
         dir_name = "/home/runner/work/manser-test/manser-test/.github/workflows/"
-        print("Hello")
-        print(dir_name)
+        # print("Hello")
+        # print(dir_name)
         result = subprocess.run(['ls', '-a'], stdout=subprocess.PIPE, text=True)
-        print(result)
+        # print(result)
         results = subprocess.run(["pwd"], stdout=subprocess.PIPE, text=True)
-        print(results)
+        # print(results)
         # /home/runner/work/<repository-name>/<repository-name>/.github
         # /home/runner/work/manser-test/manser-test
 
@@ -183,12 +183,12 @@ class PullRequestAutomationService(RemoteProgress):
         # self.repo_git_links = repo_clone_url
         logger.info(f"Cloning repository {repo_name}")
         try:
-            print(os.getcwd())
+            # print(os.getcwd())
             os.chdir(self.repo_dir)
-            print(os.getcwd())
+            # print(os.getcwd())
             Repo.clone_from(self.repo_git_link, self.repo_dir)
             os.chdir("..")
-            print(os.getcwd())
+            # print(os.getcwd())
         except GitCommandError as e:
             self.validate_and_throw_err("already exists and is not an empty directory", "Repository not empty, not proceeding with cloning.", e)
 
@@ -235,7 +235,7 @@ class PullRequestAutomationService(RemoteProgress):
         self.auth = self.github_instance.get_repo(repo.name)
         self.base_branch_name = repo.default_branch
         pull_requests = self.auth.get_pulls(state='open', sort='created', base=self.base_branch_name)
-        print(pull_requests)
+        # print(pull_requests)
         pr_exists = False
 
         for pr in pull_requests:
