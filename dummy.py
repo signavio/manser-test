@@ -66,7 +66,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
             # JWT expiration time (10 minutes maximum)
             'exp': int(time.time()) + 600,
             # GitHub App's identifier
-            'iss': self.app_id
+            'iss': self.app_id_value
         }
         
         encoded_jwt = jwt.encode(payload, self.private_key_path_value, algorithm='RS256')
