@@ -30,9 +30,8 @@ class PullRequestForNewRepos(PullRequestAutomationService):
             logger.error(f"GitHub authentication error: {e}")
             raise
     
-    
     def __init__(self):
-        super().__init__(tokens = self.token)
+        super().__init__(token=self.authenticate_github())
         logger.info("Start")
         self.org_name = "signavio"
         self.app_id = sys.argv[1]
@@ -120,7 +119,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
 if __name__ == "__main__":
     logger.info("Starting pull request creation for Managed Services GitHub mirror automation...")
     
-    pr_service = PullRequestForNewRepos(tokens = self.token)
+    pr_service = PullRequestForNewRepos()
     # pr_service.base_branch_name = "main"
     pr_service.create_prs_in_batches()
 
