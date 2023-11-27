@@ -33,11 +33,11 @@ class PullRequestAutomationService(RemoteProgress):
     ORIGIN = "origin"
     DEFAULT_BRANCHES = ["main", "master"]
 
-    def __init__(self, tokens):
+    def __init__(self, token):
         logger.info("Loading environment variables...")
         load_dotenv()
-        if tokens == True:
-            self.token = Github(tokens)
+        if token:
+            self.token = Github(token)
         else:
             self.token = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
         self.org_name = os.getenv("GITHUB_ORG")

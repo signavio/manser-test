@@ -19,7 +19,17 @@ ORIGIN = "origin"
 
 
 class PullRequestForNewRepos(PullRequestAutomationService):
-  
+    
+    def authenticate_github(self):
+        try:
+            token = self.create_access_token()
+            self.github_instance = Github(token)
+            self.org = self.github_instance.get_organization(self.org_name)
+            return token, self.org
+        except GithubException as e:
+            logger.error(f"GitHub authentication error: {e}")
+            raise
+    
     
     def __init__(self):
         super().__init__(tokens = self.token)
@@ -40,15 +50,15 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         # super().__init__(self.org, self.token, self.git_commit_msg, self.git_pr_title, self.git_pr_test, self.branch_name, self.tmp_dir, self.file_to_sync, self.dir_to_sync, self.org_name)
         
         
-    def authenticate_github(self):
-        try:
-            token = self.create_access_token()
-            self.github_instance = Github(token)
-            self.org = self.github_instance.get_organization(self.org_name)
-            return token, self.org
-        except GithubException as e:
-            logger.error(f"GitHub authentication error: {e}")
-            raise
+    # def authenticate_github(self):
+    #     try:
+    #         token = self.create_access_token()
+    #         self.github_instance = Github(token)
+    #         self.org = self.github_instance.get_organization(self.org_name)
+    #         return token, self.org
+    #     except GithubException as e:
+    #         logger.error(f"GitHub authentication error: {e}")
+    #         raise
         
     def create_access_token(self):
         payload = {
@@ -110,7 +120,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
 if __name__ == "__main__":
     logger.info("Starting pull request creation for Managed Services GitHub mirror automation...")
     
-    pr_service = PullRequestForNewRepos()
+    pr_service = PullRequestForNewRepos(tokens = self.token)
     # pr_service.base_branch_name = "main"
     pr_service.create_prs_in_batches()
 
