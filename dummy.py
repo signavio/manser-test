@@ -21,10 +21,10 @@ ORIGIN = "origin"
 class PullRequestForNewRepos(PullRequestAutomationService):
   
     
-    def __init__(self, org_name):
+    def __init__(self):
         super().__init__(tokens = self.token)
         logger.info("Start")
-        self.org_name = org_name
+        self.org_name = "signavio"
         self.app_id = sys.argv[1]
         self.private_key_path = sys.argv[2]
         self.installation_id = sys.argv[3]
