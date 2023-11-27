@@ -22,6 +22,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
   
     
     def __init__(self, org_name):
+        super().__init__(tokens = self.token)
         logger.info("Start")
         self.org_name = org_name
         self.app_id = sys.argv[1]
@@ -31,16 +32,12 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         self.git_commit_msg = "Added GitHub action for mirroring automation required for SAP compliance."
         self.git_pr_title = "CloudOS Managed Services: applying git-mirror automation required for SAP compliance."
         self.git_pr_test = "No action needed."
-        # self.jira_ticket = os.getenv('JIRA_TICKET')
         self.branch_name = "parvathy/" + "SIGMANSER-1234" + "_gitMirror"
         self.tmp_dir = "/tmp/repo_clone/"
         self.file_to_sync = "<path to GH action>/.github/workflows/git_mirror.yaml"
         self.dir_to_sync = ".github"
-        # self.app_id_value = app_id
-        # self.private_key_path_value = private_key_path
-        # self.installation_id_value = installation_id
         logger.info("Done")
-        super().__init__(self.org, self.token, self.git_commit_msg, self.git_pr_title, self.git_pr_test, self.branch_name, self.tmp_dir, self.file_to_sync, self.dir_to_sync, self.org_name)
+        # super().__init__(self.org, self.token, self.git_commit_msg, self.git_pr_title, self.git_pr_test, self.branch_name, self.tmp_dir, self.file_to_sync, self.dir_to_sync, self.org_name)
         
         
     def authenticate_github(self):
@@ -48,7 +45,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
             token = self.create_access_token()
             self.github_instance = Github(token)
             self.org = self.github_instance.get_organization(self.org_name)
-            return self.org ,token
+            return token, self.org
         except GithubException as e:
             logger.error(f"GitHub authentication error: {e}")
             raise
@@ -113,7 +110,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
 if __name__ == "__main__":
     logger.info("Starting pull request creation for Managed Services GitHub mirror automation...")
     
-    pr_service = PullRequestForNewRepos(org_name = "signavio")
+    pr_service = PullRequestForNewRepos()
     # pr_service.base_branch_name = "main"
     pr_service.create_prs_in_batches()
 
