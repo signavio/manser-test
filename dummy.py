@@ -34,9 +34,9 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         super().__init__(token=self.authenticate_github())
         logger.info("Start")
         self.org_name = "signavio"
-        self.app_id = app_id
-        self.private_key_path = private_key_path
-        self.installation_id = installation_id
+        self.app_id_value = app_id
+        self.private_key_path_value = private_key_path
+        self.installation_id_value = installation_id
         self.org, self.token = self.authenticate_github()
         self.git_commit_msg = "Added GitHub action for mirroring automation required for SAP compliance."
         self.git_pr_title = "CloudOS Managed Services: applying git-mirror automation required for SAP compliance."
