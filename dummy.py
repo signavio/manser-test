@@ -22,6 +22,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
   
     
     def __init__(self):
+        logger.info("Start")
         self.org_name = "signavio"
         self.app_id = sys.argv[1]
         self.private_key_path = sys.argv[2]
@@ -38,7 +39,9 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         # self.app_id_value = app_id
         # self.private_key_path_value = private_key_path
         # self.installation_id_value = installation_id
+        logger.info("Done")
         super().__init__(False)
+        
         
     def authenticate_github(self):
         try:
