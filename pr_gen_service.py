@@ -33,8 +33,8 @@ class PullRequestAutomationService(RemoteProgress):
     ORIGIN = "origin"
     DEFAULT_BRANCHES = ["main", "master"]
 
-    def __init__(self, false):
-        logger.info(f"PullRequestAutomationService initialized with argument:", {false})
+    def __init__(self, argument):
+        logger.info(f"PullRequestAutomationService initialized with argument:, {argument}")
         logger.info("Loading environment variables...")
         load_dotenv()
         self.github = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
