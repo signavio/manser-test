@@ -21,9 +21,9 @@ ORIGIN = "origin"
 class PullRequestForNewRepos(PullRequestAutomationService):
   
     
-    def __init__(self):
+    def __init__(self, org_name):
         logger.info("Start")
-        self.org_name = "signavio"
+        self.org_name = org_name
         self.app_id = sys.argv[1]
         self.private_key_path = sys.argv[2]
         self.installation_id = sys.argv[3]
@@ -113,7 +113,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
 if __name__ == "__main__":
     logger.info("Starting pull request creation for Managed Services GitHub mirror automation...")
     
-    pr_service = PullRequestForNewRepos()
+    pr_service = PullRequestForNewRepos(org_name = "signavio")
     # pr_service.base_branch_name = "main"
     pr_service.create_prs_in_batches()
 
