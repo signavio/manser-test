@@ -40,7 +40,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         # self.private_key_path_value = private_key_path
         # self.installation_id_value = installation_id
         logger.info("Done")
-        super().__init__(False)
+        super().__init__(self.org, self.token, self.git_commit_msg, self.git_pr_title, self.git_pr_test, self.branch_name, self.tmp_dir, self.file_to_sync, self.dir_to_sync, self.org_name)
         
         
     def authenticate_github(self):
