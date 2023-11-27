@@ -20,15 +20,15 @@ ORIGIN = "origin"
 
 class PullRequestForNewRepos(PullRequestAutomationService):
     
-    def authenticate_github(self):
-        try:
-            token = self.create_access_token()
-            self.github_instance = Github(token)
-            self.org = self.github_instance.get_organization(self.org_name)
-            return token, self.org
-        except GithubException as e:
-            logger.error(f"GitHub authentication error: {e}")
-            raise
+    # def authenticate_github(self):
+    #     try:
+    #         token = self.create_access_token()
+    #         self.github_instance = Github(token)
+    #         self.org = self.github_instance.get_organization(self.org_name)
+    #         return token, self.org
+    #     except GithubException as e:
+    #         logger.error(f"GitHub authentication error: {e}")
+    #         raise
     
     def __init__(self, app_id, private_key_path, installation_id):
         super().__init__(token=self.authenticate_github())
@@ -49,15 +49,15 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         # super().__init__(self.org, self.token, self.git_commit_msg, self.git_pr_title, self.git_pr_test, self.branch_name, self.tmp_dir, self.file_to_sync, self.dir_to_sync, self.org_name)
         
         
-    # def authenticate_github(self):
-    #     try:
-    #         token = self.create_access_token()
-    #         self.github_instance = Github(token)
-    #         self.org = self.github_instance.get_organization(self.org_name)
-    #         return token, self.org
-    #     except GithubException as e:
-    #         logger.error(f"GitHub authentication error: {e}")
-    #         raise
+    def authenticate_github(self):
+        try:
+            token = self.create_access_token()
+            self.github_instance = Github(token)
+            self.org = self.github_instance.get_organization(self.org_name)
+            return token, self.org
+        except GithubException as e:
+            logger.error(f"GitHub authentication error: {e}")
+            raise
         
     def create_access_token(self):
         payload = {
