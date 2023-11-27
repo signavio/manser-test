@@ -40,6 +40,9 @@ class PullRequestAutomationService(RemoteProgress):
             self.token = Github(token)
         else:
             self.token = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
+        self.app_id = sys.argv[1]
+        self.private_key_path = sys.argv[2]
+        self.installation_id = sys.argv[3]
         self.org_name = os.getenv("GITHUB_ORG")
         logger.info("Authenticating...")
         self.org = self.token.get_organization(self.org_name)

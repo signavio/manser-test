@@ -30,13 +30,13 @@ class PullRequestForNewRepos(PullRequestAutomationService):
     #         logger.error(f"GitHub authentication error: {e}")
     #         raise
     
-    def __init__(self, app_id, private_key_path, installation_id):
+    def __init__(self):
         super().__init__(token=self.authenticate_github())
         logger.info("Start")
         self.org_name = "signavio"
-        self.app_id_value = app_id
-        self.private_key_path_value = private_key_path
-        self.installation_id_value = installation_id
+        self.app_id_value = sys.argv[1]
+        self.private_key_path_value = sys.argv[2]
+        self.installation_id_value = sys.argv[3]
         self.org, self.token = self.authenticate_github()
         self.git_commit_msg = "Added GitHub action for mirroring automation required for SAP compliance."
         self.git_pr_title = "CloudOS Managed Services: applying git-mirror automation required for SAP compliance."
@@ -119,7 +119,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
 if __name__ == "__main__":
     logger.info("Starting pull request creation for Managed Services GitHub mirror automation...")
     
-    pr_service = PullRequestForNewRepos(app_id = sys.argv[1], private_key_path = sys.argv[2], installation_id = sys.argv[3])
+    pr_service = PullRequestForNewRepos()
     # pr_service.base_branch_name = "main"
     pr_service.create_prs_in_batches()
 
