@@ -69,10 +69,10 @@ class PullRequestForNewRepos(PullRequestAutomationService):
             'iss': self.app_id
         }
         
-        encoded_jwt = jwt.encode(payload, self.private_key_path, algorithm='RS256')
+        encoded_jwt = jwt.encode(payload, self.private_key_path_value, algorithm='RS256')
         
         response = requests.post(
-        f"https://api.github.com/app/installations/{self.installation_id}/access_tokens",
+        f"https://api.github.com/app/installations/{self.installation_id_value}/access_tokens",
         headers={
             "Accept": "application/vnd.github+json",
             "Authorization": f"Bearer {encoded_jwt}",
