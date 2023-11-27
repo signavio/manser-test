@@ -22,7 +22,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
   
     
     def __init__(self, org_name):
-        super().__init__(False)
+        super().__init__()
         self.org_name = org_name
         self.app_id = sys.argv[1]
         self.private_key_path = sys.argv[2]
