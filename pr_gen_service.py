@@ -55,7 +55,7 @@ class PullRequestAutomationService(RemoteProgress):
         self.dir_to_sync = os.getenv('DIR_TO_SYNC')
         logger.info("Initialisation completed")
 
-    def commit_and_push(self, repo_name, repo):
+    def commit_and_push(self, repo_name, repo, base_branch):
         """Adds, commits and pushes files. It validates if no changes are there before commit and push.
             It copies the files from the FILE_TO_SYNC_PATH location in .env file to the cloned repostory.
             This is then added, committed and pushed.
@@ -71,8 +71,10 @@ class PullRequestAutomationService(RemoteProgress):
         logger.info(f"New files to be send in PR will be copied under dir: {repo_dir_path}")
         curr_dir = os.getcwd()
         logger.info(f"Current dir: {curr_dir}")
-        dir_name = "".join([curr_dir, self.file_to_sync])
-        # dir_name = os.path.join(curr_dir, self.file_to_sync)
+        if base_branch:
+            dir_name = "".join([curr_dir, self.file_to_sync])
+        else:
+            dir_name = os.path.join(curr_dir, self.file_to_sync)
         logger.info(f"dir. name: {dir_name}")
 
         try:
