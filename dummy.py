@@ -44,7 +44,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         self.git_pr_test = "No action needed."
         self.branch_name = "parvathy/" + "SIGMANSER-1234" + "_gitMirror"
         self.tmp_dir = "/tmp/repo_clone/"
-        self.file_to_sync = "<path to GH action>/.github/workflows/git_mirror.yaml"
+        self.file_to_sync = "/.github/workflows/git_mirror.yaml"
         self.dir_to_sync = ".github"
         logger.info("Done")
         # super().__init__(self.org, self.token, self.git_commit_msg, self.git_pr_title, self.git_pr_test, self.branch_name, self.tmp_dir, self.file_to_sync, self.dir_to_sync, self.org_name)
