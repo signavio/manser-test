@@ -221,7 +221,7 @@ class PullRequestAutomationService(RemoteProgress):
             logger.warn("NoSectionError - {e}")
             logger.info(f"No git Configuration is present so moving ahead with configuration")
             config_writer = repo.config_writer()
-            config_writer.set_value("user", "name", "GitHubApps")
+            config_writer.set_value("user", "name", "Prateek Kesarwani")
             config_writer.set_value("user", "email", "prateek.kesarwani@sap.com")
             logger.info("Configuration is Completed")
         
