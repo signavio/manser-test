@@ -179,12 +179,14 @@ class PullRequestAutomationService(RemoteProgress):
             logger.info(f'Automation file:{self.file_to_sync} already exists in repo: {repo.name}')
             return False
 
-    def create_pr(self, repo):
+    def create_pr(self, repo, base_branch):
         """Creates PR for the files newly added and the branch pushed.
         It validates if any open PR with the same jira ticket is already available in the repository.
         If not present if proceeds with PR creation.
         :param repo: class:`github.Repository.Repository`
         """
+        if base_branch == True:
+            self.base_branch_name = base_branch
         pull_requests = repo.get_pulls(state='open', sort='created', base=self.base_branch_name)
         pr_exists = False
 

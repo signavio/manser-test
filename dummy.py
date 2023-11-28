@@ -100,7 +100,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
             if repo.name == "Manser-repo-trigger-prgen":
                 git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo.name}.git"
                 creation_date = repo.created_at.replace(tzinfo=None)
-
+                base_branch = repo.default_branch
                 if creation_date >= cutoff_date:
                     repocount_tracker += 1
                     repo_within_30_days.extend(repo.name)
@@ -108,7 +108,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
                         self.set_gitlink_n_repopath(repo.name, git_link)
                         self.clone_repository(repo.name)
                         self.commit_and_push(repo.name, repo)
-                        self.create_pr(repo) 
+                        self.create_pr(repo, base_branch) 
                 
                     except GithubException as e:
                         raise e
