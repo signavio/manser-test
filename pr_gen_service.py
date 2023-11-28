@@ -40,9 +40,6 @@ class PullRequestAutomationService(RemoteProgress):
             self.token = Github(tokens)
         else:
             self.token = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
-        # self.app_id = sys.argv[1]
-        # self.private_key_path = sys.argv[2]
-        # self.installation_id = sys.argv[3]
         self.org_name = os.getenv("GITHUB_ORG")
         logger.info("Authenticating...")
         self.org = self.token.get_organization(self.org_name)
@@ -75,6 +72,7 @@ class PullRequestAutomationService(RemoteProgress):
         curr_dir = os.getcwd()
         logger.info(f"Current dir: {curr_dir}")
         dir_name = os.path.join(curr_dir, self.file_to_sync)
+        logger.info(f"dir. name: {dir_name}")
 
         try:
             os.makedirs(repo_dir_path, exist_ok=True)
