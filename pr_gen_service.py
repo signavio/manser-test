@@ -101,7 +101,7 @@ class PullRequestAutomationService(RemoteProgress):
 
             if not diff == '':
                 self.add_git_config(repo)
-                repo.git.pull(self.ORIGIN, self.branch_name)
+                repo.git.pull
                 repo.git.commit('-m', self.git_commit_msg, None)
                 repo.git.push('-u', self.ORIGIN, self.branch_name)
             else:
