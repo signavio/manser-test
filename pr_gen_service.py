@@ -187,8 +187,11 @@ class PullRequestAutomationService(RemoteProgress):
         """
         if base_branch == True:
             self.base_branch_name = base_branch
+            self.auth = self.org.get_repo(repo.name)
             logger.info(f"base_branch_name: {self.base_branch_name}")
-        pull_requests = repo.get_pulls(state='open', sort='created', base=self.base_branch_name)
+            pull_requests = self.auth.get_pulls(state='open', sort='created', base=self.base_branch_name)
+        else:
+            pull_requests = repo.get_pulls(state='open', sort='created', base=self.base_branch_name)
         pr_exists = False
 
         for pr in pull_requests:
@@ -205,7 +208,7 @@ class PullRequestAutomationService(RemoteProgress):
             ### Test
             2. %s
             """ % (self.jira_ticket, self.git_pr_title, self.git_pr_test)
-
+            
             pull_request = repo.create_pull(self.git_pr_title, pr_body, self.base_branch_name, self.branch_name)
 
             logger.info(f'PR successfuly created, PR number: {pull_request.number}🎉🎉 ')
