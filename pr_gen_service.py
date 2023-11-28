@@ -185,7 +185,7 @@ class PullRequestAutomationService(RemoteProgress):
         If not present if proceeds with PR creation.
         :param repo: class:`github.Repository.Repository`
         """
-        if base_branch == True:
+        if base_branch:
             self.base_branch_name = base_branch
             self.auth = self.org.get_repo(repo.name)
             logger.info(f"base_branch_name: {self.base_branch_name}")
