@@ -187,7 +187,7 @@ class PullRequestAutomationService(RemoteProgress):
         """
         if base_branch == True:
             self.base_branch_name = base_branch
-            logger.info{f"base_branch_name: {self.base_branch_name}"}
+            logger.info(f"base_branch_name: {self.base_branch_name}")
         pull_requests = repo.get_pulls(state='open', sort='created', base=self.base_branch_name)
         pr_exists = False
 
