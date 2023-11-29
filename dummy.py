@@ -20,11 +20,11 @@ logger = structlog.get_logger(__name__)
 
 
 class PullRequestForNewRepos(PullRequestAutomationService):
-    
+
     GITHUB_REMOTE = "git@github.com:"
     ORIGIN = "origin"
     DEFAULT_BRANCHES = ["main", "master"]
-    
+
     def __init__(self):
         logger.info("Start")
         self.org_name = "signavio"
@@ -41,8 +41,8 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         self.file_to_sync = ".github/workflows/git_mirror.yaml"
         self.dir_to_sync = ".github"
         logger.info("Done")
-        
-        
+
+
     def authenticate_github(self):
         try:
             token = self.create_access_token()
@@ -52,7 +52,8 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         except GithubException as e:
             logger.error(f"GitHub authentication error: {e}")
             raise
-        
+
+
     def create_access_token(self):
         payload = {
             # Issued at time
@@ -62,9 +63,9 @@ class PullRequestForNewRepos(PullRequestAutomationService):
             # GitHub App's identifier
             'iss': self.app_id_value
         }
-        
+
         encoded_jwt = jwt.encode(payload, self.private_key_path_value, algorithm='RS256')
-        
+
         response = requests.post(
         f"https://api.github.com/app/installations/{self.installation_id_value}/access_tokens",
         headers={
@@ -75,44 +76,42 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         )
 
         return response.json()["token"]
-    
-            
-    def create_prs_in_batches(self):  
+
+
+    def create_prs_in_batches(self):
         """Creates PRs for repositories created within the last 30 days.
         It pushes the files to be delivered as per the configuration env var files.
         """
-        cutoff_date = datetime.now() - timedelta(days=60)
+        cutoff_date = datetime.now() - timedelta(days=30)
         repocount_tracker = 0
-        repo_within_30_days= []
-        total_repos= len(repo_within_30_days)
+        repo_within_30_days = []
+        total_repos = len(repo_within_30_days)
 
         logger.info(f"Filtering repositories in org: {self.org} by creation time asc and creating PRs.")
         print(type(self.org))
 
         for repo in self.org.get_repos(direction="desc", sort="created", type="all"):
-            if repo.name == "Manser-repo-trigger-prgen":
-                git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo.name}.git"
-                creation_date = repo.created_at.replace(tzinfo=None)
-                base_branch = repo.default_branch
-                if creation_date >= cutoff_date:
-                    repocount_tracker += 1
-                    repo_within_30_days.extend(repo.name)
-                    try:
-                        self.set_gitlink_n_repopath(repo.name, git_link)
-                        self.clone_repository(repo.name)
-                        self.commit_and_push(repo.name, repo)
-                        self.create_pr(repo) 
-                
-                    except GithubException as e:
-                        raise e
-        
+            creation_date = repo.created_at.replace(tzinfo=None)
+            if creation_date >= cutoff_date:
+                repocount_tracker += 1
+                repo_within_30_days.extend(repo.name)
+                try:
+                    git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo.name}.git"
+                    self.set_gitlink_n_repopath(repo.name, git_link)
+                    self.clone_repository(repo.name)
+                    self.commit_and_push(repo.name, repo)
+                    self.create_pr(repo)
+
+                except GithubException as e:
+                    raise e
+
     # Check if all PRs are done for all repositories in the organization
         self.check_if_all_prs_done(repocount_tracker, total_repos)
 
-            
+
 if __name__ == "__main__":
     logger.info("Starting pull request creation for Managed Services GitHub mirror automation...")
-    
+
     pr_service = PullRequestForNewRepos()
     pr_service.create_prs_in_batches()
 

@@ -42,7 +42,7 @@ class PullRequestAutomationService(RemoteProgress):
             self.token = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
         self.org_name = os.getenv("GITHUB_ORG")
         logger.info("Authenticating...")
-        self.org = self.token.get_organization(self.org_name)
+        self.org = self.github.get_organization(self.org_name)
         self.jira_ticket = os.getenv('JIRA_TICKET')
         self.branch_name = os.getenv('BRANCH_NAME_PREFIX') + os.getenv('JIRA_TICKET') + os.getenv('BRANCH_NAME_SUFFIX')
         self.repo_count = int(os.getenv('REPO_COUNT'))
@@ -71,12 +71,7 @@ class PullRequestAutomationService(RemoteProgress):
         logger.info(f"New files to be send in PR will be copied under dir: {repo_dir_path}")
         curr_dir = os.getcwd()
         logger.info(f"Current dir: {curr_dir}")
-        # if base_branch:
-        # dir_name = "".join([curr_dir, self.file_to_sync])
-        # else:
         dir_name = os.path.join(curr_dir, self.file_to_sync)
-        logger.info(f"filetosync: {self.file_to_sync}")
-        logger.info(f"dir. name: {dir_name}")
 
         try:
             os.makedirs(repo_dir_path, exist_ok=True)
@@ -170,6 +165,7 @@ class PullRequestAutomationService(RemoteProgress):
             logger.info(f"Clone directory already exists at {self.tmp_dir}")
         return self.tmp_dir
 
+
     def file_exists(self, repo) -> bool:
         """Checks if file_to_sync to sync exists in the repository
         :param repo: class:`github.Repository.Repository`
@@ -188,12 +184,6 @@ class PullRequestAutomationService(RemoteProgress):
         If not present if proceeds with PR creation.
         :param repo: class:`github.Repository.Repository`
         """
-        # if base_branch:
-        #     self.base_branch_name = base_branch
-        #     self.auth = self.org.get_repo(repo.name)
-        #     logger.info(f"base_branch_name: {self.base_branch_name}")
-        #     pull_requests = self.auth.get_pulls(state='open', sort='created', base=self.base_branch_name)
-        # else:
         pull_requests = repo.get_pulls(state='open', sort='created', base=repo.default_branch)
         pr_exists = False
 
@@ -211,27 +201,28 @@ class PullRequestAutomationService(RemoteProgress):
             ### Test
             2. %s
             """ % (self.jira_ticket, self.git_pr_title, self.git_pr_test)
-            
+
             pull_request = repo.create_pull(self.git_pr_title, pr_body, repo.default_branch, self.branch_name)
 
             logger.info(f'PR successfuly created, PR number: {pull_request.number}🎉🎉 ')
             logger.info(f"PR title: {self.git_pr_title} ")
             logger.info(f"PR body:  {pr_body}")
-            
+
+
     def add_git_config(self, repo):
         config_reader = repo.config_reader()
         try:
             user_name = config_reader.get_value("user", "name")
             user_email = config_reader.get_value("user", "email")
-            logger.info(f"Config user.name: {user_name}, Config user.email: {user_email}" )
+            logger.info(f"Config user.name: {user_name}, Config user.email: {user_email}")
         except NoSectionError as e:
-            logger.warn(f"NoSectionError - {e}")
-            logger.info(f"No git Configuration is present so moving ahead with configuration")
+            logger.warn(NoSectionError - {e})
+            logger.info("No git Configuration is present so moving ahead with configuration")
             config_writer = repo.config_writer()
             config_writer.set_value("user", "name", "Prateek Kesarwani")
             config_writer.set_value("user", "email", "prateek.kesarwani@sap.com")
             logger.info("Configuration is Completed")
-        
+
 
     def create_prs_in_batches(self):
         """Creates PRs for repositories in the given org in batches based on the confiuration(REPO_COUNT).
@@ -259,7 +250,7 @@ class PullRequestAutomationService(RemoteProgress):
         logger.info(f"Filtering repositories in org: {self.org_name} by creation time asc and creating PRs for {self.repo_count} repositories.")
         for repo in self.org.get_repos(direction="asc", sort="created", type="all"):
             repocount_tracker = repocount_tracker + 1
-            # self.base_branch_name = repo.default_branch
+            self.base_branch_name = repo.default_branch
             logger.info(f"Retrieved repository:  {repo.name}...")
 
             if repo.name == self.last_repo:
