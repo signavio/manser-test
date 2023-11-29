@@ -72,9 +72,10 @@ class PullRequestAutomationService(RemoteProgress):
         curr_dir = os.getcwd()
         logger.info(f"Current dir: {curr_dir}")
         # if base_branch:
-        #     dir_name = "".join([curr_dir, self.file_to_sync])
+        dir_name = "".join([curr_dir, self.file_to_sync])
         # else:
-        dir_name = os.path.join(curr_dir, self.file_to_sync)
+        # dir_name = os.path.join(curr_dir, self.file_to_sync)
+        logger.info(f"filetosync: {self.file_to_sync}")
         logger.info(f"dir. name: {dir_name}")
 
         try:
