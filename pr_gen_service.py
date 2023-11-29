@@ -72,9 +72,9 @@ class PullRequestAutomationService(RemoteProgress):
         curr_dir = os.getcwd()
         logger.info(f"Current dir: {curr_dir}")
         # if base_branch:
-        dir_name = "".join([curr_dir, self.file_to_sync])
+        # dir_name = "".join([curr_dir, self.file_to_sync])
         # else:
-        # dir_name = os.path.join(curr_dir, self.file_to_sync)
+        dir_name = os.path.join(curr_dir, self.file_to_sync)
         logger.info(f"filetosync: {self.file_to_sync}")
         logger.info(f"dir. name: {dir_name}")
 
@@ -259,7 +259,7 @@ class PullRequestAutomationService(RemoteProgress):
         logger.info(f"Filtering repositories in org: {self.org_name} by creation time asc and creating PRs for {self.repo_count} repositories.")
         for repo in self.org.get_repos(direction="asc", sort="created", type="all"):
             repocount_tracker = repocount_tracker + 1
-            self.base_branch_name = repo.default_branch
+            # self.base_branch_name = repo.default_branch
             logger.info(f"Retrieved repository:  {repo.name}...")
 
             if repo.name == self.last_repo:

@@ -38,7 +38,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         self.git_pr_test = "No action needed."
         self.branch_name = "parvathy/" + "SIGMANSER-1234" + "_gitMirror"
         self.tmp_dir = "/tmp/repo_clone/"
-        self.file_to_sync = "/.github/workflows/git_mirror.yaml"
+        self.file_to_sync = ".github/workflows/git_mirror.yaml"
         self.dir_to_sync = ".github"
         logger.info("Done")
         
