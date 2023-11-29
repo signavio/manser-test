@@ -14,24 +14,18 @@ from pr_gen_service import PullRequestAutomationService
 configure_logging()
 logger = structlog.get_logger(__name__) 
 
-GITHUB_REMOTE = "git@github.com:"
-ORIGIN = "origin"
+# GITHUB_REMOTE = "git@github.com:"
+# ORIGIN = "origin"
+# DEFAULT_BRANCHES = ["main", "master"]
 
 
 class PullRequestForNewRepos(PullRequestAutomationService):
     
-    # def authenticate_github(self):
-    #     try:
-    #         token = self.create_access_token()
-    #         self.github_instance = Github(token)
-    #         self.org = self.github_instance.get_organization(self.org_name)
-    #         return token, self.org
-    #     except GithubException as e:
-    #         logger.error(f"GitHub authentication error: {e}")
-    #         raise
+    GITHUB_REMOTE = "git@github.com:"
+    ORIGIN = "origin"
+    DEFAULT_BRANCHES = ["main", "master"]
     
     def __init__(self):
-        # super().__init__(token=self.authenticate_github())
         logger.info("Start")
         self.org_name = "signavio"
         self.app_id_value = sys.argv[1]
@@ -47,7 +41,6 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         self.file_to_sync = "/.github/workflows/git_mirror.yaml"
         self.dir_to_sync = ".github"
         logger.info("Done")
-        # super().__init__(self.org, self.token, self.git_commit_msg, self.git_pr_title, self.git_pr_test, self.branch_name, self.tmp_dir, self.file_to_sync, self.dir_to_sync, self.org_name)
         
         
     def authenticate_github(self):
@@ -107,8 +100,8 @@ class PullRequestForNewRepos(PullRequestAutomationService):
                     try:
                         self.set_gitlink_n_repopath(repo.name, git_link)
                         self.clone_repository(repo.name)
-                        self.commit_and_push(repo.name, repo, base_branch)
-                        self.create_pr(repo, base_branch) 
+                        self.commit_and_push(repo.name, repo)
+                        self.create_pr(repo) 
                 
                     except GithubException as e:
                         raise e
@@ -121,7 +114,6 @@ if __name__ == "__main__":
     logger.info("Starting pull request creation for Managed Services GitHub mirror automation...")
     
     pr_service = PullRequestForNewRepos()
-    # pr_service.base_branch_name = "main"
     pr_service.create_prs_in_batches()
 
     logger.info('Successfuly completed PR generation for this run..🎉🎉🎉 ')

@@ -55,7 +55,7 @@ class PullRequestAutomationService(RemoteProgress):
         self.dir_to_sync = os.getenv('DIR_TO_SYNC')
         logger.info("Initialisation completed")
 
-    def commit_and_push(self, repo_name, repo, base_branch):
+    def commit_and_push(self, repo_name, repo):
         """Adds, commits and pushes files. It validates if no changes are there before commit and push.
             It copies the files from the FILE_TO_SYNC_PATH location in .env file to the cloned repostory.
             This is then added, committed and pushed.
@@ -71,11 +71,10 @@ class PullRequestAutomationService(RemoteProgress):
         logger.info(f"New files to be send in PR will be copied under dir: {repo_dir_path}")
         curr_dir = os.getcwd()
         logger.info(f"Current dir: {curr_dir}")
-        if base_branch:
-            dir_name = "".join([curr_dir, self.file_to_sync])
-        else:
-            dir_name = os.path.join(curr_dir, self.file_to_sync)
-        logger.info(f"dir. name: {dir_name}")
+        # if base_branch:
+        #     dir_name = "".join([curr_dir, self.file_to_sync])
+        # else:
+        dir_name = os.path.join(curr_dir, self.file_to_sync)
 
         try:
             os.makedirs(repo_dir_path, exist_ok=True)
@@ -181,19 +180,19 @@ class PullRequestAutomationService(RemoteProgress):
             logger.info(f'Automation file:{self.file_to_sync} already exists in repo: {repo.name}')
             return False
 
-    def create_pr(self, repo, base_branch):
+    def create_pr(self, repo):
         """Creates PR for the files newly added and the branch pushed.
         It validates if any open PR with the same jira ticket is already available in the repository.
         If not present if proceeds with PR creation.
         :param repo: class:`github.Repository.Repository`
         """
-        if base_branch:
-            self.base_branch_name = base_branch
-            self.auth = self.org.get_repo(repo.name)
-            logger.info(f"base_branch_name: {self.base_branch_name}")
-            pull_requests = self.auth.get_pulls(state='open', sort='created', base=self.base_branch_name)
-        else:
-            pull_requests = repo.get_pulls(state='open', sort='created', base=self.base_branch_name)
+        # if base_branch:
+        #     self.base_branch_name = base_branch
+        #     self.auth = self.org.get_repo(repo.name)
+        #     logger.info(f"base_branch_name: {self.base_branch_name}")
+        #     pull_requests = self.auth.get_pulls(state='open', sort='created', base=self.base_branch_name)
+        # else:
+        pull_requests = repo.get_pulls(state='open', sort='created', base=self.base_branch_name)
         pr_exists = False
 
         for pr in pull_requests:
@@ -224,7 +223,7 @@ class PullRequestAutomationService(RemoteProgress):
             user_email = config_reader.get_value("user", "email")
             logger.info(f"Config user.name: {user_name}, Config user.email: {user_email}" )
         except NoSectionError as e:
-            logger.warn("NoSectionError - {e}")
+            logger.warn(NoSectionError - {e})
             logger.info(f"No git Configuration is present so moving ahead with configuration")
             config_writer = repo.config_writer()
             config_writer.set_value("user", "name", "Prateek Kesarwani")
