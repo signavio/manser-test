@@ -216,7 +216,7 @@ class PullRequestAutomationService(RemoteProgress):
             user_email = config_reader.get_value("user", "email")
             logger.info(f"Config user.name: {user_name}, Config user.email: {user_email}")
         except NoSectionError as e:
-            logger.warn(NoSectionError - {e})
+            logger.warn(f"NoSectionError - {e}")
             logger.info("No git Configuration is present so moving ahead with configuration")
             config_writer = repo.config_writer()
             config_writer.set_value("user", "name", "Prateek Kesarwani")
