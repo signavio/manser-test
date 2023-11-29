@@ -1,26 +1,26 @@
-name: Manser Bot Action
+name: Auto-generate Pull Request workflow for new repositories
 
 on:
-  schedule:
-    - cron: '0 8 1 * *' # Run at 8 o'clock on the 1st of every month
+  # schedule:
+  #   - cron: '0 8 1 * *' # Run at 8 o'clock on the 1st of every month
   workflow_dispatch:
   
-jobs:
-  run-python-script:
+jobs: 
+  auto-generate-pull-requests:
+    name: Auto-generate Pull Requests Job
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
         
-    - name: Install dependencies
-      run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-    - name: Run Python script
-      run: python dummy.py "${{ secrets.MANSER_BOT_APPLICATION_ID }}" "${{ secrets.MANSER_BOT_APPLICATION_PRIVATE_KEY }}" "${{ secrets.MANSER_BOT_INSTALLATION_ID }}"
-
+      - name: Run Python script
+        run: python pr_gen_new_repo.py "${{ secrets.MANSER_BOT_APPLICATION_ID }}" "${{ secrets.MANSER_BOT_APPLICATION_PRIVATE_KEY }}" "${{ secrets.MANSER_BOT_INSTALLATION_ID }}"
