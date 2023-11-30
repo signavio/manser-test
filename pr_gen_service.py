@@ -55,7 +55,7 @@ class PullRequestAutomationService(RemoteProgress):
         self.dir_to_sync = os.getenv('DIR_TO_SYNC')
         logger.info("Initialisation completed")
 
-    def commit_and_push(self, repo_name, repo):
+    def commit_and_push(self, repo_name):
         """Adds, commits and pushes files. It validates if no changes are there before commit and push.
             It copies the files from the FILE_TO_SYNC_PATH location in .env file to the cloned repostory.
             This is then added, committed and pushed.
