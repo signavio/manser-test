@@ -83,9 +83,9 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         It pushes the files to be delivered as per the configuration env var files.
         """
         cutoff_date = datetime.now() - timedelta(days=30)
-        repocount_tracker = 0
-        repo_within_30_days = []
-        total_repos = len(repo_within_30_days)
+        # repocount_tracker = 0
+        # repo_within_30_days = []
+        # total_repos = len(repo_within_30_days)
 
         logger.info(f"Filtering repositories in org: {self.org} by creation time asc and creating PRs.")
         print(type(self.org))
@@ -94,8 +94,8 @@ class PullRequestForNewRepos(PullRequestAutomationService):
             if repo.name == "Manser-repo-trigger-prgen":
                 creation_date = repo.created_at.replace(tzinfo=None)
                 if creation_date >= cutoff_date:
-                    repocount_tracker += 1
-                    repo_within_30_days.extend(repo.name)
+                    # repocount_tracker += 1
+                    # repo_within_30_days.extend(repo.name)
                     try:
                         base_branch_name = repo.default_branch
                         git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo.name}.git"
@@ -108,7 +108,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
                         raise e
 
     # Check if all PRs are done for all repositories in the organization
-        self.check_if_all_prs_done(repocount_tracker, total_repos)
+        # self.check_if_all_prs_done(repocount_tracker, total_repos)
 
 
 if __name__ == "__main__":
