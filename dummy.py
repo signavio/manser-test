@@ -101,7 +101,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
                         base_branch_name = repo.default_branch
                         git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo.name}.git"
                         self.set_gitlink_n_repopath(repo.name, git_link)
-                        self.clone_repository(repo.name)
+                        self.clone_repository(repo.name, git_link)
                         self.commit_and_push(repo.name, repo)
                         self.create_pr(repo, base_branch_name)
 

@@ -36,7 +36,7 @@ class PullRequestAutomationService(RemoteProgress):
     def __init__(self, tokens):
         logger.info("Loading environment variables...")
         load_dotenv()
-        if tokens:
+        if tokens == True:
             self.token = Github(tokens)
         else:
             self.token = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
