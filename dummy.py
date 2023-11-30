@@ -92,20 +92,21 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         print(type(self.org))
 
         for repo in self.org.get_repos(direction="desc", sort="created", type="all"):
-            creation_date = repo.created_at.replace(tzinfo=None)
-            if creation_date >= cutoff_date:
-                repocount_tracker += 1
-                repo_within_30_days.extend(repo.name)
-                try:
-                    base_branch_name = repo.default_branch
-                    git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo.name}.git"
-                    self.set_gitlink_n_repopath(repo.name, git_link)
-                    self.clone_repository(repo.name)
-                    self.commit_and_push(repo.name, repo)
-                    self.create_pr(repo, base_branch_name)
+            if repo.name == "Manser-repo-trigger-prgen":
+                creation_date = repo.created_at.replace(tzinfo=None)
+                if creation_date >= cutoff_date:
+                    repocount_tracker += 1
+                    repo_within_30_days.extend(repo.name)
+                    try:
+                        base_branch_name = repo.default_branch
+                        git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo.name}.git"
+                        self.set_gitlink_n_repopath(repo.name, git_link)
+                        self.clone_repository(repo.name)
+                        self.commit_and_push(repo.name, repo)
+                        self.create_pr(repo, base_branch_name)
 
-                except GithubException as e:
-                    raise e
+                    except GithubException as e:
+                        raise e
 
     # Check if all PRs are done for all repositories in the organization
         self.check_if_all_prs_done(repocount_tracker, total_repos)
