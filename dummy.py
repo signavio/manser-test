@@ -44,11 +44,10 @@ class PullRequestForNewRepos(PullRequestAutomationService):
 
     def authenticate_github(self):
         try:
-            token = self.create_access_token()
-            self.github_instance = Github(token)
+            self.token = self.create_access_token()
+            self.github_instance = Github(self.token)
             self.org = self.github_instance.get_organization(self.org_name)
-            self.token = token
-            return token
+            return self.token
         except GithubException as e:
             logger.error(f"GitHub authentication error: {e}")
             raise
