@@ -42,11 +42,6 @@ class PullRequestAutomationService(RemoteProgress):
             self.org_name = os.getenv("GITHUB_ORG")
             logger.info("Authenticating...")
             self.org = self.token.get_organization(self.org_name)
-        else:
-            self.token = self.create_access_token()
-            self.tokens = Github(self.token)
-            self.org_name = "signavio"
-            self.org = self.tokens.get_organization(self.org_name)
         self.jira_ticket = os.getenv('JIRA_TICKET')
         self.branch_name = os.getenv('BRANCH_NAME_PREFIX') + os.getenv('JIRA_TICKET') + os.getenv('BRANCH_NAME_SUFFIX')
         self.repo_count = int(os.getenv('REPO_COUNT'))
