@@ -98,13 +98,13 @@ class PullRequestForNewRepos(PullRequestAutomationService):
                     # repocount_tracker += 1
                     # repo_within_30_days.extend(repo.name)
                     try:
-                        base_branch_name = repo.default_branch
+                        self.base_branch_name = repo.default_branch
                         # git_link = f"git@github.com:{self.org_name}/{repo.name}.git"
                         git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo.name}.git"
                         self.set_gitlink_n_repopath(repo.name, git_link)
                         self.clone_repository(repo.name)
                         self.commit_and_push(repo.name)
-                        self.create_pr(repo, base_branch_name)
+                        self.create_pr(repo)
 
                     except GithubException as e:
                         raise e

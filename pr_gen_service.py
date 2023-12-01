@@ -182,13 +182,13 @@ class PullRequestAutomationService(RemoteProgress):
             logger.info(f'Automation file:{self.file_to_sync} already exists in repo: {repo.name}')
             return False
 
-    def create_pr(self, repo, base_branch_name):
+    def create_pr(self, repo):
         """Creates PR for the files newly added and the branch pushed.
         It validates if any open PR with the same jira ticket is already available in the repository.
         If not present if proceeds with PR creation.
         :param repo: class:`github.Repository.Repository`
         """
-        pull_requests = repo.get_pulls(state='open', sort='created', base=base_branch_name)
+        pull_requests = repo.get_pulls(state='open', sort='created', base=self.base_branch_name)
         pr_exists = False
 
         for pr in pull_requests:
@@ -206,7 +206,7 @@ class PullRequestAutomationService(RemoteProgress):
             2. %s
             """ % (self.jira_ticket, self.git_pr_title, self.git_pr_test)
 
-            pull_request = repo.create_pull(self.git_pr_title, pr_body, base_branch_name, self.branch_name)
+            pull_request = repo.create_pull(self.git_pr_title, pr_body, self.base_branch_name, self.branch_name)
 
             logger.info(f'PR successfuly created, PR number: {pull_request.number}🎉🎉 ')
             logger.info(f"PR title: {self.git_pr_title} ")
@@ -254,7 +254,7 @@ class PullRequestAutomationService(RemoteProgress):
         logger.info(f"Filtering repositories in org: {self.org_name} by creation time asc and creating PRs for {self.repo_count} repositories.")
         for repo in self.org.get_repos(direction="asc", sort="created", type="all"):
             repocount_tracker = repocount_tracker + 1
-            base_branch_name = repo.default_branch
+            self.base_branch_name = repo.default_branch
             logger.info(f"Retrieved repository:  {repo.name}...")
 
             if repo.name == self.last_repo:
@@ -266,7 +266,7 @@ class PullRequestAutomationService(RemoteProgress):
                 continue
 
             filter_condition1 = (is_first_run and firstrun_counter <= self.repo_count) or (found_last_repo and continue_counter <= self.repo_count)
-            filter_condition2 = base_branch_name in self.DEFAULT_BRANCHES and repo.visibility == 'private'
+            filter_condition2 = self.base_branch_name in self.DEFAULT_BRANCHES and repo.visibility == 'private'
             all_filters = filter_condition1 and filter_condition2
             if all_filters and not self.file_exists(repo):
                 try:
@@ -274,7 +274,7 @@ class PullRequestAutomationService(RemoteProgress):
                     self.set_gitlink_n_repopath(repo.name, repo_git_link)
                     self.clone_repository(repo.name)
                     self.commit_and_push(repo.name)
-                    self.create_pr(repo, base_branch_name)
+                    self.create_pr(repo)
 
                 except GithubException as e:
                     raise e
