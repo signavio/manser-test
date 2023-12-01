@@ -43,6 +43,7 @@ class PullRequestAutomationService(RemoteProgress):
             logger.info("Authenticating...")
         else:
             self.token = self.authenticate_github()
+            self.org_name = os.getenv("GITHUB_ORG")
         self.org = self.token.get_organization(self.org_name)
         self.jira_ticket = os.getenv('JIRA_TICKET')
         self.branch_name = os.getenv('BRANCH_NAME_PREFIX') + os.getenv('JIRA_TICKET') + os.getenv('BRANCH_NAME_SUFFIX')
