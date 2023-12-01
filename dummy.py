@@ -31,9 +31,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
         self.app_id_value = sys.argv[1]
         self.private_key_path_value = sys.argv[2]
         self.installation_id_value = sys.argv[3]
-        self.token = self.authenticate_github()
-        super().__init__(tokens=self.token)
-        # self.token = True
+        super().__init__(tokens=self.authenticate_github())
         self.git_commit_msg = "Added GitHub action for mirroring automation required for SAP compliance."
         self.git_pr_title = "CloudOS Managed Services: applying git-mirror automation required for SAP compliance."
         self.git_pr_test = "No action needed."
@@ -49,6 +47,7 @@ class PullRequestForNewRepos(PullRequestAutomationService):
             token = self.create_access_token()
             self.github_instance = Github(token)
             self.org = self.github_instance.get_organization(self.org_name)
+            self.token = token
             return token
         except GithubException as e:
             logger.error(f"GitHub authentication error: {e}")
@@ -99,8 +98,8 @@ class PullRequestForNewRepos(PullRequestAutomationService):
                     # repo_within_30_days.extend(repo.name)
                     try:
                         base_branch_name = repo.default_branch
-                        git_link = f"git@github.com:{self.org_name}/{repo.name}.git"
-                        # git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo.name}.git"
+                        # git_link = f"git@github.com:{self.org_name}/{repo.name}.git"
+                        git_link = f"https://x-access-token:{self.token}@github.com/{self.org_name}/{repo.name}.git"
                         self.set_gitlink_n_repopath(repo.name, git_link)
                         self.clone_repository(repo.name)
                         self.commit_and_push(repo.name)
