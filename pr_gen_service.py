@@ -33,15 +33,16 @@ class PullRequestAutomationService(RemoteProgress):
     ORIGIN = "origin"
     DEFAULT_BRANCHES = ["main", "master"]
 
-    def __init__(self, tokens):
+    def __init__(self, load_env_value):
         logger.info("Loading environment variables...")
         load_dotenv()
-        if tokens:
-            self.token = Github(tokens)
-        else:
+        logger.info(f"xyz: {load_env_value}")
+        if load_env_value:
             self.token = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
-        self.org_name = os.getenv("GITHUB_ORG")
-        logger.info("Authenticating...")
+            self.org_name = os.getenv("GITHUB_ORG")
+            logger.info("Authenticating...")
+        else:
+            self.token = self.authenticate_github()
         self.org = self.token.get_organization(self.org_name)
         self.jira_ticket = os.getenv('JIRA_TICKET')
         self.branch_name = os.getenv('BRANCH_NAME_PREFIX') + os.getenv('JIRA_TICKET') + os.getenv('BRANCH_NAME_SUFFIX')
@@ -306,7 +307,7 @@ class PullRequestAutomationService(RemoteProgress):
 if __name__ == "__main__":
     logger.info("Starting pull request creation for Managed Services GitHub mirror automation...")
 
-    pr_service = PullRequestAutomationService()
+    pr_service = PullRequestAutomationService(True)
     pr_service.create_prs_in_batches()
 
     logger.info('Successfuly completed PR generation for this run..🎉🎉🎉 ')
