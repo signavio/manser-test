@@ -43,7 +43,7 @@ class PullRequestAutomationService(RemoteProgress):
             logger.info("Authenticating...")
             self.org = self.token.get_organization(self.org_name)
         else:
-            self.token = self.authenticate_github()
+            self.token = self.create_access_token()
             self.tokens = Github(self.token)
             self.org_name = "signavio"
             self.org = self.tokens.get_organization(self.org_name)
