@@ -15,7 +15,7 @@
             uses: actions/checkout@v3     # Checks out our code into github runner.
     
           - name: Mirror Repository
-            uses: signavio/manser-repo-mirror-action@v1     # Our custom Action
+            uses: signavio/manser-repo-mirror-action@v1.test     # Our custom Action
             with:
               target_org: signavio-backup
               source_access_token: ${{ secrets.GITHUB_TOKEN }}     # Secrets created within Github Organisation.
