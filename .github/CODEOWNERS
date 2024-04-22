@@ -1,4 +1,4 @@
 # Define code owners to ensure review by experts before infrastructure changes can be applied
 # Please note that the code owner must have write access to the repository.
 # When the code owner is a team, that team must have write permissions on this repo.
-* @signavio/cloudos-manser @signavio/cloudos-admins
+* @signavio/cloudos-manser
